@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ShieldCheck,
   Database,
@@ -6,6 +6,7 @@ import {
   Scale,
   ArrowRight,
   ExternalLink,
+  ChevronRight,
 } from "lucide-react";
 import MobileHeader from "../Components/MobileHeader";
 import { CONSENT_UI } from "../constants/ui";
@@ -20,90 +21,160 @@ const iconMap = {
 
 const Consent = () => {
   const [isChecked, setIsChecked] = useState(false);
+  const [businessType, setBusinessType] = useState("Hospitality");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const type = localStorage.getItem("businessType") || "Hospitality";
+    setBusinessType(type);
+  }, []);
+
+  const isCorporate = businessType === "Corporate";
 
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
 
+      {isCorporate && (
+        <div className="mt-4 mb-4">
+          <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+            Verification Step 3 of 4
+          </span>
+          <div className="w-full h-1 bg-gray-100 mt-2">
+            <div className="w-[75%] h-full bg-[#1b3631]"></div>
+          </div>
+        </div>
+      )}
+
       {/* Title */}
-      <h1 className="text-2xl text-brand mb-2">{CONSENT_UI.TITLE}</h1>
+      <h1 className={`${isCorporate ? 'text-3xl font-bold text-[#1b3631]' : 'text-2xl text-brand'} mb-4`}>
+        {CONSENT_UI.TITLE}
+      </h1>
 
       {/* Description */}
-      <p className="text-sm text-gray-500 mb-4 leading-[20px]">
-        {CONSENT_UI.DESCRIPTION}
+      <p className="text-sm text-gray-500 mb-6 leading-[22px]">
+        {isCorporate
+          ? "To verify your identity for this visit, we need your consent to process your personal data."
+          : CONSENT_UI.DESCRIPTION}
       </p>
 
-      {/* Consent Items */}
-      <div className="space-y-3">
-        {CONSENT_UI.ITEMS.map((item) => {
-          const Icon = iconMap[item.icon];
+      {isCorporate ? (
+        <div className="space-y-6 overflow-y-auto pr-2 pb-6">
+          <section>
+            <h4 className="text-sm font-bold text-[#1b3631] mb-2">We will use:</h4>
+            <ul className="text-sm text-gray-500 space-y-2 list-disc ml-5">
+              <li>Your email address</li>
+              <li>Your phone number shared at reception</li>
+              <li>Details from the ID you selected for verification</li>
+            </ul>
+          </section>
 
-          return (
-            <div key={item.id} className="flex gap-3">
-              <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
-                <Icon size={16} className="text-brand" />
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold">{item.title}</h4>
-                <p className="text-xs text-gray-500 leading-[20px]">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+          <section>
+            <h4 className="text-sm font-bold text-[#1b3631] mb-2">This information is used only for:</h4>
+            <ul className="text-sm text-gray-500 space-y-2 list-disc ml-5">
+              <li>Visitor identity verification</li>
+              <li>Access and security management for this location</li>
+            </ul>
+          </section>
 
-      <div className="flex-1" />
+          <section>
+            <h4 className="text-sm font-bold text-[#1b3631] mb-2">Your data:</h4>
+            <ul className="text-sm text-gray-500 space-y-2 list-disc ml-5">
+              <li>Is processed only for the purpose of this visit and related compliance</li>
+              <li>Is not sold or used for marketing</li>
+              <li>Is shared only with the hosting organization and its authorized service providers</li>
+              <li>Is retained only for as long as required by law or operational needs</li>
+            </ul>
+          </section>
+
+          <p className="text-xs text-gray-400 leading-relaxed">
+            You can request access, correction, or withdrawal of consent as per India's <span className="italic">Digital Personal Data Protection (DPDP) Act</span>.
+          </p>
+
+          <a href="#" className="flex items-center gap-1 text-sm font-bold text-[#1b3631] underline decoration-[#1b3631]/20">
+            View privacy notice <ExternalLink size={14} />
+          </a>
+        </div>
+      ) : (
+        /* Consent Items for Hospitality */
+        <div className="space-y-3">
+          {CONSENT_UI.ITEMS.map((item) => {
+            const Icon = iconMap[item.icon];
+            return (
+              <div key={item.id} className="flex gap-3">
+                <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
+                  <Icon size={16} className="text-brand" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold">{item.title}</h4>
+                  <p className="text-xs text-gray-500 leading-[20px]">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {!isCorporate && <div className="flex-1" />}
 
       {/* Checkbox Section */}
-      <div className="bg-gray-100 border border-gray-200 rounded-[6px] p-4 mb-2">
+      <div className={`mt-auto ${isCorporate ? 'bg-gray-50' : 'bg-gray-100'} border border-gray-100 rounded-lg p-4 mb-4`}>
         <div className="flex items-start gap-3">
           <input
             type="checkbox"
             checked={isChecked}
             onChange={(e) => setIsChecked(e.target.checked)}
-            className="mt-1 accent-brand"
+            className={`mt-1 h-5 w-5 rounded border-gray-300 ${isCorporate ? 'accent-[#1b3631]' : 'accent-brand'}`}
           />
           <div>
-            <p className="text-sm font-medium leading-[20px]">
-              {CONSENT_UI.CHECKBOX_TEXT}
+            <p className="text-sm font-medium text-[#1b3631] leading-[20px]">
+              {isCorporate
+                ? "I consent to the processing of my personal data for identity verification and visitor access management."
+                : CONSENT_UI.CHECKBOX_TEXT}
             </p>
-            <p className="text-xs text-gray-500 mt-1  leading-[20px]">
-              {CONSENT_UI.CHECKBOX_SUBTEXT}
-            </p>
+            {!isCorporate && (
+              <p className="text-xs text-gray-500 mt-1 leading-[20px]">
+                {CONSENT_UI.CHECKBOX_SUBTEXT}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Privacy Link */}
-
-      <a
-        href="#"
-        target="#"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 mb-4 text-sm underline hover:text-blue-700 transition"
-      >
-        {CONSENT_UI.PRIVACY_LINK}
-        <ExternalLink size={14} />
-      </a>
+      {!isCorporate && (
+        <a
+          href="#"
+          target="#"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 mb-4 text-sm underline hover:text-blue-700 transition"
+        >
+          {CONSENT_UI.PRIVACY_LINK}
+          <ExternalLink size={14} />
+        </a>
+      )}
 
       {/* Continue Button */}
       <button
         disabled={!isChecked}
         onClick={() => navigate("/verification")}
-        className={`w-full h-14 shrink-0 rounded-[6px] font-semibold flex items-center justify-center gap-2 transition
-          ${
-            isChecked
-              ? "bg-brand text-white hover:opacity-90"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        className={`w-full h-14 shrink-0 rounded-[8px] font-bold flex items-center justify-center gap-2 transition
+          ${isChecked
+            ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
+            : "bg-gray-100 text-gray-400 cursor-not-allowed"
           }
         `}
       >
-        {CONSENT_UI.CONTINUE_BUTTON}
-        <ArrowRight size={18} />
+        {isCorporate ? "I Accept" : CONSENT_UI.CONTINUE_BUTTON}
+        {isCorporate ? <ChevronRight size={18} /> : <ArrowRight size={18} />}
       </button>
+
+      {isCorporate && (
+        <p className="mt-4 text-[10px] text-gray-400 text-center uppercase tracking-widest font-bold">
+          Securely processed by 1Pass Verify
+        </p>
+      )}
     </div>
   );
 };

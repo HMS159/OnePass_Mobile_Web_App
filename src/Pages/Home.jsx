@@ -1,11 +1,14 @@
-import React from "react";
-import { X, Lock, ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { X, Lock, ArrowRight, Building2, Hotel, ChevronDown } from "lucide-react";
 import { HOME_UI } from "../constants/ui";
 import Logo from "../assets/images/1pass_logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Home = () => {
   const { guestNumber, restaurantId } = useParams();
+  const [selectedType, setSelectedType] = useState("Hospitality");
+  const [selectedPlan, setSelectedPlan] = useState("Starter");
+
   // Remove country code (91) if present
   const cleanNumber = guestNumber?.startsWith("91")
     ? guestNumber.slice(2)
@@ -27,6 +30,10 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleContinue = () => {
+    // Save selections to localStorage for persistence across pages
+    localStorage.setItem("businessType", selectedType);
+    localStorage.setItem("businessPlan", selectedPlan);
+
     if (cleanNumber === "9586023883") {
       navigate("/email");
     } else if (cleanNumber === "8401159610") {
@@ -65,9 +72,54 @@ const Home = () => {
               <span>{HOME_UI.getTitle(propertyName).propertyName}</span>
             </h1>
 
-            <p className="text-sm text-gray-600 leading-[20px]">
-              {HOME_UI.getDescription(propertyName, phoneNumber)}
-            </p>
+            {/* Selection Options */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => setSelectedType("Hospitality")}
+                className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${selectedType === "Hospitality"
+                    ? "border-brand bg-brand/5 text-brand"
+                    : "border-gray-100 bg-gray-50 text-gray-400"
+                  }`}
+              >
+                <Hotel size={24} />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Hospitality
+                </span>
+              </button>
+              <button
+                onClick={() => setSelectedType("Corporate")}
+                className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${selectedType === "Corporate"
+                    ? "border-brand bg-brand/5 text-brand"
+                    : "border-gray-100 bg-gray-50 text-gray-400"
+                  }`}
+              >
+                <Building2 size={24} />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Corporate
+                </span>
+              </button>
+            </div>
+
+            {/* Plan Selection */}
+            <div className="pt-2 text-left">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
+                Select Service Plan
+              </label>
+              <div className="relative mt-1">
+                <select
+                  value={selectedPlan}
+                  onChange={(e) => setSelectedPlan(e.target.value)}
+                  className="w-full h-12 bg-gray-50 border border-gray-100 rounded-xl px-4 text-sm font-semibold text-[#1b3631] appearance-none outline-none focus:border-brand/30"
+                >
+                  <option value="Starter">Starter Plan</option>
+                  <option value="SMB">SMB Plan</option>
+                  <option value="Enterprise">Enterprise Plan</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                  <ChevronDown size={18} />
+                </div>
+              </div>
+            </div>
 
             {/* Dots */}
             <div className="flex justify-center gap-2 pt-2">

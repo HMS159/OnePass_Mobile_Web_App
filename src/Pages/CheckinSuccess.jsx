@@ -74,7 +74,7 @@ const CheckinSuccess = () => {
       <div className="w-full bg-white rounded-[6px] p-6 shadow-sm border border-gray-200 relative text-center">
         {/* Close Button */}
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/history")}
           className="absolute top-4 right-4 text-gray-400"
         >
           <X size={18} />
