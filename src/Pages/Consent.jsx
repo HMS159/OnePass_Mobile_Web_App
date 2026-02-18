@@ -23,14 +23,18 @@ const Consent = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [businessType, setBusinessType] = useState("Hospitality");
   const [businessPlan, setBusinessPlan] = useState("Starter");
+  const [isVerifiedUser, setIsVerifiedUser] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const type = localStorage.getItem("businessType") || "Hospitality";
     const plan = localStorage.getItem("businessPlan") || "Starter";
+    const verified = localStorage.getItem("isVerifiedUser") === "true";
 
     setBusinessType(type);
     setBusinessPlan(plan);
+    setIsVerifiedUser(verified);
   }, []);
 
   const isCorporate = businessType === "Corporate";
@@ -42,6 +46,20 @@ const Consent = () => {
   const shouldShowStarterConsent =
     (businessType === "Corporate" || businessType === "Hospitality") &&
     businessPlan === "Starter";
+
+  // 🔥 NEW REDIRECT LOGIC
+  const shouldRedirectToFaceMatch =
+    (businessType === "Corporate" || businessType === "Hospitality") &&
+    businessPlan === "Enterprise" &&
+    isVerifiedUser;
+
+  const handleContinue = () => {
+    if (shouldRedirectToFaceMatch) {
+      navigate("/face-match");
+    } else {
+      navigate("/verification");
+    }
+  };
 
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
@@ -197,7 +215,7 @@ const Consent = () => {
       {/* Continue Button */}
       <button
         disabled={!isChecked}
-        onClick={() => navigate("/verification")}
+        onClick={handleContinue}
         className={`w-full h-14 shrink-0 rounded-[8px] font-bold flex items-center justify-center gap-2 transition
           ${
             isChecked
