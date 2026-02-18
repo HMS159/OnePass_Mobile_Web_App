@@ -8,16 +8,10 @@ const Home = () => {
   const { guestNumber, restaurantId } = useParams();
   const navigate = useNavigate();
 
-  /* =========================
-     DEFAULT STATES
-  ========================== */
+  const VERIFIED_NUMBER = "8401159610";
 
   const [selectedType, setSelectedType] = useState("Hospitality");
   const [selectedPlan, setSelectedPlan] = useState("SMB");
-
-  /* =========================
-     PROPERTY NAME
-  ========================== */
 
   const restaurants = {
     1: "Google HQ",
@@ -27,10 +21,6 @@ const Home = () => {
   };
 
   const propertyName = restaurants[restaurantId] || "Sunrise Diner";
-
-  /* =========================
-     PLAN LOGIC
-  ========================== */
 
   const defaultPlanByType = {
     Hospitality: "SMB",
@@ -46,14 +36,43 @@ const Home = () => {
     setSelectedPlan(defaultPlanByType[selectedType]);
   }, [selectedType]);
 
-  /* =========================
-     CONTINUE HANDLER
-  ========================== */
+  useEffect(() => {
+    if (!guestNumber) return;
+
+    const last10Digits = guestNumber.slice(-10);
+
+    if (last10Digits === VERIFIED_NUMBER) {
+      console.log("✅ Verified user detected");
+
+      localStorage.setItem("isVerifiedUser", "true");
+      localStorage.setItem("verifiedNumber", last10Digits);
+    } else {
+      localStorage.removeItem("isVerifiedUser");
+      localStorage.removeItem("verifiedNumber");
+    }
+  }, [guestNumber]);
 
   const handleContinue = () => {
+    const isVerified = localStorage.getItem("isVerifiedUser");
+
+    // Always store selected values
     localStorage.setItem("businessType", selectedType);
     localStorage.setItem("businessPlan", selectedPlan);
-    navigate("/email");
+
+    const isValidType =
+      selectedType === "Corporate" || selectedType === "Hospitality";
+
+    const isValidPlan =
+      selectedPlan === "Starter" ||
+      selectedPlan === "SMB" ||
+      selectedPlan === "Enterprise";
+
+    if (isVerified === "true" && isValidType && isValidPlan) {
+      console.log("🚀 Verified + Valid Type + Valid Plan → Welcome Back");
+      navigate("/welcome-back");
+    } else {
+      navigate("/email");
+    }
   };
 
   return (
@@ -65,12 +84,12 @@ const Home = () => {
         </div>
 
         <div className="text-center space-y-4">
-          {/* 🔥 VERIFICATION LABEL (RESTORED) */}
+          {/* Verification Label */}
           <p className="text-xs tracking-widest text-gray-500 font-semibold leading-[20px]">
             {HOME_UI.VERIFICATION_LABEL}
           </p>
 
-          {/* 🔥 TITLE (RESTORED) */}
+          {/* Title */}
           <h1 className="text-2xl font-bold text-[#1b3631] leading-snug">
             {HOME_UI.getTitle(propertyName).line1} <br />
             <span>{HOME_UI.getTitle(propertyName).propertyName}</span>
@@ -132,7 +151,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* 🔥 DOTS (RESTORED) */}
+          {/* Dots */}
           <div className="flex justify-center gap-2 pt-2">
             <span className="w-2 h-2 bg-[#1b3631] rounded-full" />
             <span className="w-2 h-2 bg-gray-300 rounded-full" />
@@ -148,7 +167,7 @@ const Home = () => {
             <ArrowRight size={18} />
           </button>
 
-          {/* 🔥 PRIVACY TEXT (RESTORED) */}
+          {/* Privacy Text */}
           <p className="text-xs text-gray-400 pt-2 leading-[20px]">
             {HOME_UI.PRIVACY_TEXT}{" "}
             <span className="underline cursor-pointer">
