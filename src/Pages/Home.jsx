@@ -37,7 +37,12 @@ const Home = () => {
   }, [selectedType]);
 
   useEffect(() => {
-    if (!guestNumber) return;
+    if (!guestNumber) {
+      // ✅ If no number in URL, clear verification
+      localStorage.removeItem("isVerifiedUser");
+      localStorage.removeItem("verifiedNumber");
+      return;
+    }
 
     const last10Digits = guestNumber.slice(-10);
 

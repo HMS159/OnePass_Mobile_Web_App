@@ -10,13 +10,16 @@ const VerificationCode = () => {
   const [businessType, setBusinessType] = useState("Hospitality");
   const [businessPlan, setBusinessPlan] = useState("");
   const [showCodeView, setShowCodeView] = useState(false);
+  const [isVerifiedUser, setIsVerifiedUser] = useState(false); // ✅ NEW
 
   useEffect(() => {
     const type = localStorage.getItem("businessType") || "Hospitality";
     const plan = localStorage.getItem("businessPlan") || "";
+    const verified = localStorage.getItem("isVerifiedUser") === "true"; // ✅ NEW
 
     setBusinessType(type);
     setBusinessPlan(plan);
+    setIsVerifiedUser(verified); // ✅ NEW
 
     const randomNumber = Math.floor(100000 + Math.random() * 900000);
 
@@ -36,12 +39,17 @@ const VerificationCode = () => {
 
   const showCorporateView = isEligibleType && (isSMB || isEnterprise);
 
+  // ✅ NEW CONDITION
+  const shouldDirectlyShowCode = isEligibleType && isSMB && isVerifiedUser;
+
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
 
       {/* ✅ STEP CONTROL */}
-      {!showCodeView ? (
+      {shouldDirectlyShowCode ? (
+        renderCodeView() // 👈 directly show code if verified SMB user
+      ) : !showCodeView ? (
         showCorporateView ? (
           /* ================= CORPORATE SCREEN ================= */
           <div className="flex flex-col h-full">
@@ -95,9 +103,9 @@ const VerificationCode = () => {
             <button
               onClick={() => {
                 if (isSMB) {
-                  setShowCodeView(true); // 👈 show hospitality view
+                  setShowCodeView(true);
                 } else if (isEnterprise) {
-                  navigate("/face-match"); // 👈 enterprise flow
+                  navigate("/face-match");
                 }
               }}
               className="w-full h-14 bg-[#1b3631] text-white rounded-[8px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
@@ -116,17 +124,15 @@ const VerificationCode = () => {
             </div>
           </div>
         ) : (
-          /* If not corporate flow → show code screen directly */
           renderCodeView()
         )
       ) : (
-        /* ================= HOSPITALITY CODE VIEW ================= */
         renderCodeView()
       )}
     </div>
   );
 
-  // ✅ Extracted for clean structure
+  // ================= CODE VIEW =================
   function renderCodeView() {
     return (
       <div className="flex flex-col h-full">
