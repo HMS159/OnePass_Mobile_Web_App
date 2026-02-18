@@ -54,7 +54,7 @@ const VerificationCode = () => {
           /* ================= CORPORATE SCREEN ================= */
           <div className="flex flex-col h-full">
             {/* Progress Bar */}
-            <div className="mt-4 mb-8">
+            <div className="mt-4 mb-5">
               <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
                 Step 4 of 5
               </span>
@@ -108,7 +108,7 @@ const VerificationCode = () => {
                   navigate("/face-match");
                 }
               }}
-              className="w-full h-14 bg-[#1b3631] text-white rounded-[8px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
+              className="w-full h-14 bg-[#1b3631] shrink-0 text-white rounded-[8px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
             >
               Proceed with verification <ChevronRight size={18} />
             </button>
@@ -118,7 +118,7 @@ const VerificationCode = () => {
               You will be redirected to a secure verification gateway
             </div>
 
-            <div className="mt-12 flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-widest pb-4">
+            <div className="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-widest pb-4">
               <span>ENCRYPTED</span>
               <span>POWERED BY 1Pass</span>
             </div>
