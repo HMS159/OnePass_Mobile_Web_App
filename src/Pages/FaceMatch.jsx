@@ -8,7 +8,7 @@ import {
   Check,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import MobileHeader from "../components/MobileHeader";
+import MobileHeader from "../Components/MobileHeader"
 
 const FaceMatch = () => {
   const navigate = useNavigate();
@@ -94,9 +94,8 @@ const FaceMatch = () => {
                 }
               />
               <span
-                className={`text-sm font-bold ${
-                  status === "success" ? "text-[#1b3631]" : "text-gray-600"
-                }`}
+                className={`text-sm font-bold ${status === "success" ? "text-[#1b3631]" : "text-gray-600"
+                  }`}
               >
                 {status === "success"
                   ? "Image captured successfully"
@@ -157,10 +156,9 @@ const FaceMatch = () => {
           disabled={status !== "success"}
           onClick={() => navigate("/success")}
           className={`w-full h-14 rounded-xl font-bold transition flex items-center justify-center gap-2
-            ${
-              status === "success"
-                ? "bg-[#1b3631] text-white shadow-lg shadow-black/10"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            ${status === "success"
+              ? "bg-[#1b3631] text-white shadow-lg shadow-black/10"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
         >
           {status === "success" ? "Continue" : "Waiting for capture..."}

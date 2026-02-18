@@ -1,15 +1,24 @@
 import React from "react";
-import { Building2 } from "lucide-react";
+import { Building2, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
 import { HISTORY_UI } from "../constants/ui";
+import Logo from "../assets/images/1pass_logo.png";
 
 const CheckinHistory = () => {
   const navigate = useNavigate();
 
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
-      <MobileHeader />
+      {/* <MobileHeader /> */}
+
+      {/* Header with Logo centered and Avatar on right */}
+      <div className="relative flex items-center justify-center" style={{ marginTop: "40px" }}>
+        <img src={Logo} alt="1Pass Logo" className="h-15 object-contain" />
+        <div className="absolute right-0 w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-300 transition">
+          <User size={20} className="text-gray-600" />
+        </div>
+      </div>
 
       {/* Title */}
       <h1 className="text-2xl text-brand mb-2">{HISTORY_UI.TITLE}</h1>
@@ -49,13 +58,13 @@ const CheckinHistory = () => {
 
       <div className="flex-1" />
 
-      {/* Done Button */}
+      {/* Done Button
       <button
         onClick={() => navigate("/")}
         className="w-full h-14 bg-brand text-white rounded-[6px] font-semibold hover:opacity-90 transition mt-6"
       >
         {HISTORY_UI.DONE_BUTTON}
-      </button>
+      </button> */}
     </div>
   );
 };

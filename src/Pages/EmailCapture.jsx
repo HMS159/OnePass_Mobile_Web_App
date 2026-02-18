@@ -113,12 +113,11 @@ const EmailCapture = () => {
             autoComplete="off"
             className={`w-full bg-white text-sm h-12 rounded-[6px] border px-4 transition
               outline-none focus:outline-none focus:ring-0 focus:border-gray-300
-              ${
-                email.length > 0
-                  ? isValidEmail
-                    ? "border-gray-200"
-                    : "border-red-400"
-                  : "border-gray-200"
+              ${email.length > 0
+                ? isValidEmail
+                  ? "border-gray-200"
+                  : "border-red-400"
+                : "border-gray-200"
               }
             `}
           />
@@ -170,22 +169,19 @@ const EmailCapture = () => {
       {/* Footer */}
       <div className="mt-8">
         <div
-          className={`p-4 rounded-lg flex items-start gap-4 mb-8 ${
-            shouldShowCorporatePrivacy
+          className={`p-4 rounded-lg flex items-start gap-4 mb-8 ${shouldShowCorporatePrivacy
               ? "bg-gray-50 border border-gray-100"
               : ""
-          }`}
+            }`}
         >
           <ShieldCheck
             size={20}
-            className={`${
-              shouldShowCorporatePrivacy ? "text-[#1b3631]" : "text-gray-400"
-            } mt-1 shrink-0`}
+            className={`${shouldShowCorporatePrivacy ? "text-[#1b3631]" : "text-gray-400"
+              } mt-1 shrink-0`}
           />
           <p
-            className={`text-[10px] leading-relaxed uppercase tracking-wider font-bold ${
-              shouldShowCorporatePrivacy ? "text-gray-500" : "text-gray-400"
-            }`}
+            className={`text-[10px] leading-relaxed uppercase tracking-wider font-bold ${shouldShowCorporatePrivacy ? "text-gray-500" : "text-gray-400"
+              }`}
           >
             {shouldShowCorporatePrivacy
               ? EMAIL_CAPTURE_UI.PRIVACY_TEXT
@@ -195,12 +191,16 @@ const EmailCapture = () => {
 
         <button
           disabled={!isFormValid}
-          onClick={() => navigate("/consent")}
+          onClick={() => {
+            if (selectedId) {
+              localStorage.setItem("selectedId", selectedId);
+            }
+            navigate("/consent");
+          }}
           className={`w-full h-14 rounded-[8px] font-bold transition flex items-center justify-center gap-2
-            ${
-              isFormValid
-                ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
-                : "bg-gray-100 text-gray-400 cursor-not-allowed"
+            ${isFormValid
+              ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
+              : "bg-gray-100 text-gray-400 cursor-not-allowed"
             }
           `}
         >
