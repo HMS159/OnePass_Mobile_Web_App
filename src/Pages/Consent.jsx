@@ -65,22 +65,12 @@ const Consent = () => {
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
 
-      {shouldShowDetailedConsent && (
-        <div className="mt-4 mb-4">
-          <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-            Verification Step 3 of 4
-          </span>
-          <div className="w-full h-1 bg-gray-100 mt-2">
-            <div className="w-[75%] h-full bg-[#1b3631]"></div>
-          </div>
-        </div>
-      )}
-
       <h1
-        className={`${isCorporate
+        className={`${
+          isCorporate
             ? "text-3xl font-bold text-[#1b3631]"
             : "text-2xl text-brand"
-          } mb-4`}
+        } mb-4`}
       >
         {CONSENT_UI.TITLE}
       </h1>
@@ -177,16 +167,18 @@ const Consent = () => {
 
       {/* Checkbox Section */}
       <div
-        className={`mt-auto ${isCorporate ? "bg-gray-50" : "bg-gray-100"
-          } border border-gray-100 rounded-lg p-4 mb-4`}
+        className={`mt-auto ${
+          isCorporate ? "bg-gray-50" : "bg-gray-100"
+        } border border-gray-100 rounded-lg p-4 mb-4`}
       >
         <div className="flex items-start gap-3">
           <input
             type="checkbox"
             checked={isChecked}
             onChange={(e) => setIsChecked(e.target.checked)}
-            className={`mt-1 h-5 w-5 rounded border-gray-300 ${isCorporate ? "accent-[#1b3631]" : "accent-brand"
-              }`}
+            className={`mt-1 h-5 w-5 rounded border-gray-300 ${
+              isCorporate ? "accent-[#1b3631]" : "accent-brand"
+            }`}
           />
 
           <div>
@@ -214,9 +206,10 @@ const Consent = () => {
         disabled={!isChecked}
         onClick={handleContinue}
         className={`w-full h-14 shrink-0 rounded-[8px] font-bold flex items-center justify-center gap-2 transition
-          ${isChecked
-            ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
-            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+          ${
+            isChecked
+              ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
+              : "bg-gray-100 text-gray-400 cursor-not-allowed"
           }
         `}
       >

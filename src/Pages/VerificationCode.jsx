@@ -161,18 +161,6 @@ const VerificationCode = () => {
             <div
               className={`flex flex-col h-full ${selectedId !== "aadhaar" ? "items-center text-center" : ""}`}
             >
-              {/* Progress Bar for Aadhaar */}
-              {selectedId === "aadhaar" && (
-                <div className="mt-4 mb-5">
-                  <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                    Step 4 of 5
-                  </span>
-                  <div className="w-full h-1 bg-gray-100 mt-2">
-                    <div className="w-[80%] h-full bg-[#1b3631]"></div>
-                  </div>
-                </div>
-              )}
-
               {/* Main Content Card Wrapper for non-Aadhaar */}
               <div
                 className={`w-full ${selectedId !== "aadhaar" ? "bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-50 p-6 flex flex-col items-center mt-2" : ""}`}
