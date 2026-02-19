@@ -51,20 +51,6 @@ const EmailVerification = () => {
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
 
-      {/* STEP INDICATOR */}
-      <div className="mt-4 mb-8">
-        <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-          {EMAIL_VERIFICATION_UI.STEP_LABEL}
-        </span>
-
-        <div className="w-full h-1 bg-gray-100 mt-3 flex gap-2">
-          <div className="flex-1 bg-[#1b3631] rounded-full"></div>
-          <div className="flex-1 bg-[#1b3631] rounded-full"></div>
-          <div className="flex-1 bg-gray-200 rounded-full"></div>
-          <div className="flex-1 bg-gray-200 rounded-full"></div>
-        </div>
-      </div>
-
       {/* ICON + TEXT */}
       <div className="flex flex-col items-center text-center mt-10">
         <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">

@@ -59,25 +59,6 @@ const EmailCapture = () => {
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
 
-      {/* Corporate Progress */}
-
-      {(businessType === "Corporate" || businessType === "Hospitality") &&
-        isSMBOrEnterprise && (
-          <div className="mt-6 mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                Step 2 of 5
-              </span>
-              <span className="text-[10px] font-bold text-gray-600 tracking-widest uppercase">
-                40% Complete
-              </span>
-            </div>
-            <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div className="w-[40%] h-full bg-[#1b3631] rounded-full" />
-            </div>
-          </div>
-        )}
-
       {/* Title */}
 
       <h1 className="mb-3 text-3xl font-bold text-[#1b3631]">
