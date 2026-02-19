@@ -60,9 +60,6 @@ const MyProfile = () => {
                 alt="profile"
                 className="w-24 h-24 rounded-full object-cover"
               />
-              <button className="absolute bottom-1 right-1 bg-[#1b3631] p-2 rounded-md text-white shadow-md">
-                <Edit2 size={14} />
-              </button>
             </div>
             <h3 className="mt-4 font-semibold text-gray-800 tracking-wide">
               ALEX HARRISON
