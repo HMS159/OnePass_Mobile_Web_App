@@ -11,14 +11,10 @@ const EmailVerification = () => {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    // ✅ Get email from navigation state
     if (location.state?.email) {
       setEmail(location.state.email);
-
-      // Optional: store in localStorage if you still want persistence
       localStorage.setItem("userEmail", location.state.email);
     } else {
-      // Fallback if user refreshes page
       const storedEmail = localStorage.getItem("userEmail");
       if (storedEmail) {
         setEmail(storedEmail);
@@ -26,21 +22,44 @@ const EmailVerification = () => {
     }
   }, [location.state]);
 
-  // ✅ Open default email application
+  // ✅ Platform Detection
+  const getPlatform = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/android/i.test(userAgent)) return "android";
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "ios";
+    return "other";
+  };
+
+  // ✅ Open Mail Inbox (Best Possible per Platform)
   const handleOpenEmailApp = () => {
-    if (email) {
-      window.location.href = `mailto:${email}`;
-      // ⏳ Delay navigation (example: 3 seconds)
-      setTimeout(() => {
-        navigate("/consent", {
-          state: {
-            email,
-            businessType: location.state?.businessType,
-            businessPlan: location.state?.businessPlan,
-          },
-        });
-      }, 3000); // 3000ms = 3 seconds
+    const platform = getPlatform();
+    let url = "";
+
+    if (platform === "android") {
+      // Opens default mail app to inbox
+      url =
+        "intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_EMAIL;end";
+    } else if (platform === "ios") {
+      // Attempts to open Gmail inbox (if installed)
+      url = "googlegmail://";
+    } else {
+      // Desktop fallback (compose window)
+      url = "mailto:";
     }
+
+    window.location.href = url;
+
+    // ⏳ Navigate after delay
+    setTimeout(() => {
+      navigate("/consent", {
+        state: {
+          email,
+          businessType: location.state?.businessType,
+          businessPlan: location.state?.businessPlan,
+        },
+      });
+    }, 3000);
   };
 
   const handleResend = () => {
@@ -64,8 +83,7 @@ const EmailVerification = () => {
         <p className="text-sm text-gray-500 leading-[22px] max-w-xs">
           We've sent a verification link to{" "}
           <span className="font-semibold text-[#111827]">{email}</span>. Please
-          click the link to confirm your email address and continue with your
-          check-in.
+          check your inbox and confirm your email to continue.
         </p>
       </div>
 
