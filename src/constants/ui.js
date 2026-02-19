@@ -29,7 +29,7 @@ export const EMAIL_CAPTURE_UI = {
   PRIVACY_TEXT:
     "Your email address is processed securely for visitor management purposes and will not be used for marketing without your explicit consent.",
 
-  CONTINUE_BUTTON: "Verify email",
+  CONTINUE_BUTTON: "Verify email →",
 };
 
 export const WELCOME_BACK_UI = {

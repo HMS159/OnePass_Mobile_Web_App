@@ -26,7 +26,9 @@ const CheckinSuccess = () => {
       businessType === "Corporate" || businessType === "Hospitality";
 
     const isSmbOrEnterprise =
-      businessPlan === "SMB" || businessPlan === "Enterprise";
+      businessPlan === "Starter" ||
+      businessPlan === "SMB" ||
+      businessPlan === "Enterprise";
 
     if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
       navigate("/history");
