@@ -1,10 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Check, X, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CHECKIN_SUCCESS_UI } from "../constants/ui";
 
 const CheckinSuccess = () => {
   const navigate = useNavigate();
+
+  const [businessType, setBusinessType] = useState("");
+  const [businessPlan, setBusinessPlan] = useState("");
+  const [isUserVerified, setIsUserVerified] = useState(false);
+
+  useEffect(() => {
+    // Get values from localStorage (adjust if coming from context)
+    const type = localStorage.getItem("businessType");
+    const plan = localStorage.getItem("businessPlan");
+    const verified = localStorage.getItem("isVerifiedUser");
+
+    setBusinessType(type);
+    setBusinessPlan(plan);
+    setIsUserVerified(verified === "true");
+  }, []);
+
+  const handleDoneNavigation = () => {
+    const isCorporateOrHospitality =
+      businessType === "Corporate" || businessType === "Hospitality";
+
+    const isSmbOrEnterprise =
+      businessPlan === "SMB" || businessPlan === "Enterprise";
+
+    if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
+      navigate("/history");
+    } else {
+      navigate("/profile");
+    }
+  };
 
   return (
     <div className="w-full h-dvh bg-gray-100 flex flex-col items-center justify-center px-4 py-5">
@@ -21,10 +50,8 @@ const CheckinSuccess = () => {
         {/* 🔥 Animated Success Icon */}
         <div className="flex justify-center mb-6">
           <div className="relative flex items-center justify-center">
-            {/* Pulse Ring */}
             <span className="absolute w-15 h-15 rounded-full bg-brand/20 animate-ping"></span>
 
-            {/* Main Circle */}
             <div className="w-20 h-20 rounded-full bg-brand flex items-center justify-center shadow-lg animate-pop">
               <Check size={28} className="text-white" />
             </div>
@@ -44,9 +71,9 @@ const CheckinSuccess = () => {
           {CHECKIN_SUCCESS_UI.SUBTEXT}
         </p>
 
-        {/* Done Button */}
+        {/* ✅ Done Button with Conditional Navigation */}
         <button
-          onClick={() => navigate("/profile")}
+          onClick={handleDoneNavigation}
           className="w-full h-14 bg-brand text-white rounded-[6px] font-semibold hover:opacity-90 transition"
         >
           {CHECKIN_SUCCESS_UI.DONE_BUTTON}
