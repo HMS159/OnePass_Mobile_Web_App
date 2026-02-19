@@ -29,7 +29,7 @@ export const EMAIL_CAPTURE_UI = {
   PRIVACY_TEXT:
     "Your email address is processed securely for visitor management purposes and will not be used for marketing without your explicit consent.",
 
-  CONTINUE_BUTTON: "Continue",
+  CONTINUE_BUTTON: "Verify email",
 };
 
 export const WELCOME_BACK_UI = {
@@ -163,4 +163,15 @@ export const HISTORY_UI = {
       status: "COMPLETED",
     },
   ],
+};
+
+export const EMAIL_VERIFICATION_UI = {
+  STEP_LABEL: "Step 2 of 4",
+  TITLE: "Check your inbox",
+  DESCRIPTION:
+    "We've sent a verification link to {email}. Please click the link to confirm your email address and continue with your check-in.",
+  PRIMARY_BUTTON: "Open email app",
+  CHANGE_EMAIL: "Change email address",
+  RESEND_TEXT: "Didn't receive an email?",
+  RESEND_BUTTON: "Resend",
 };

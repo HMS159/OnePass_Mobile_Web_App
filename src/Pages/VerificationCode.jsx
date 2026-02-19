@@ -9,7 +9,7 @@ import {
   FileText,
   BadgeCheck,
   Building2,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
@@ -57,12 +57,18 @@ const VerificationCode = () => {
       case "passport":
         return {
           title: "Verify with Passport",
-          description: "Please have your physical Passport ready for digital verification. You will use our electronic service to securely validate your document; there is no need to present it to the receptionist.",
+          description:
+            "Please have your physical Passport ready for digital verification. You will use our electronic service to securely validate your document; there is no need to present it to the receptionist.",
           icon: (
             <div className="relative">
               <User size={40} className="text-[#1b3631]" />
               <div className="absolute -top-1 -right-1">
-                <BadgeCheck size={16} className="text-[#1b3631]" fill="#1b3631" stroke="white" />
+                <BadgeCheck
+                  size={16}
+                  className="text-[#1b3631]"
+                  fill="#1b3631"
+                  stroke="white"
+                />
               </div>
             </div>
           ),
@@ -70,46 +76,50 @@ const VerificationCode = () => {
           footerLink: "I do not have my passport at this time",
           showStatus: false,
           showImage: false,
-          headerText: "1Pass Check-in"
+          headerText: "1Pass Check-in",
         };
       case "voter":
         return {
           title: "Digital Voter ID Verification",
-          description: "Please have your physical Voter ID card ready. You will use our electronic verification service to validate your details. You do not need to present your card to the receptionist.",
+          description:
+            "Please have your physical Voter ID card ready. You will use our electronic verification service to validate your details. You do not need to present your card to the receptionist.",
           icon: <IdCard size={40} className="text-[#1b3631]" />,
           card: null,
           footerLink: "Need help? Contact support",
           showStatus: false,
           showImage: true,
-          headerText: "1Pass Check-in"
+          headerText: "1Pass Check-in",
         };
       case "dl":
         return {
           title: "Digital Identity Verification",
-          description: "Please have your physical Driver's License ready for our secure electronic validation service. You will not need to show your ID to the receptionist; the entire process is completed digitally for your privacy.",
+          description:
+            "Please have your physical Driver's License ready for our secure electronic validation service. You will not need to show your ID to the receptionist; the entire process is completed digitally for your privacy.",
           icon: <IdCard size={40} className="text-[#1b3631]" />,
           card: null,
           footerLink: null,
           showStatus: true,
           statusText: "ELECTRONIC VALIDATION READY",
           stepText: "Step 2 of 4 • Identity Verification",
-          headerText: "Check-in"
+          headerText: "Check-in",
         };
       case "aadhaar":
       default:
         return {
           title: "Verify your ID",
-          description: "Verify your Aadhaar securely to continue. The verification process is encrypted and direct.",
+          description:
+            "Verify your Aadhaar securely to continue. The verification process is encrypted and direct.",
           icon: <ShieldCheck size={40} className="text-[#1b3631]" />,
           card: {
             title: "Aadhaar Verification",
-            description: "Have your Aadhaar number and registered mobile phone ready for OTP.",
-            icon: <Briefcase size={24} className="text-[#1b3631]" />
+            description:
+              "Have your Aadhaar number and registered mobile phone ready for OTP.",
+            icon: <Briefcase size={24} className="text-[#1b3631]" />,
           },
           footerLink: null,
           showStatus: false,
           showImage: false,
-          headerText: "1Pass Check-in"
+          headerText: "1Pass Check-in",
         };
     }
   };
@@ -128,12 +138,12 @@ const VerificationCode = () => {
     <div className="w-full h-dvh bg-white flex flex-col overflow-y-auto">
       {/* Dynamic Header */}
       {showCorporateView && !showCodeView && !shouldDirectlyShowCode ? (
-        <div className="w-full h-16 px-6 flex items-center justify-between shrink-0">
+        <div className="w-full h-15 px-6 flex items-center justify-between shrink-0">
           <button onClick={() => navigate(-1)} className="text-[#1b3631]">
             <ArrowLeft size={24} />
           </button>
-          <h1 className="text-xl font-black text-[#1b3631] tracking-tighter">
-            {selectedId === 'aadhaar' ? '1/Pass' : content.headerText}
+          <h1 className="text-lg font-bold font-black text-[#1b3631] tracking-tighter">
+            {selectedId === "aadhaar" ? "1/Pass" : content.headerText}
           </h1>
           <div className="w-6" />
         </div>
@@ -148,9 +158,11 @@ const VerificationCode = () => {
           renderCodeView()
         ) : !showCodeView ? (
           showCorporateView ? (
-            <div className={`flex flex-col h-full ${selectedId !== 'aadhaar' ? 'items-center text-center' : ''}`}>
+            <div
+              className={`flex flex-col h-full ${selectedId !== "aadhaar" ? "items-center text-center" : ""}`}
+            >
               {/* Progress Bar for Aadhaar */}
-              {selectedId === 'aadhaar' && (
+              {selectedId === "aadhaar" && (
                 <div className="mt-4 mb-5">
                   <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
                     Step 4 of 5
@@ -162,8 +174,9 @@ const VerificationCode = () => {
               )}
 
               {/* Main Content Card Wrapper for non-Aadhaar */}
-              <div className={`w-full ${selectedId !== 'aadhaar' ? 'bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-50 p-6 flex flex-col items-center mt-2' : ''}`}>
-
+              <div
+                className={`w-full ${selectedId !== "aadhaar" ? "bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-50 p-6 flex flex-col items-center mt-2" : ""}`}
+              >
                 {/* Icon Container */}
                 <div className="flex justify-center mb-8 pt-4">
                   <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center">
@@ -172,7 +185,9 @@ const VerificationCode = () => {
                 </div>
 
                 {/* Title & Description */}
-                <div className={`mb-8 ${selectedId === 'aadhaar' ? 'text-center px-4' : ''}`}>
+                <div
+                  className={`mb-8 ${selectedId === "aadhaar" ? "text-center px-4" : ""}`}
+                >
                   <h1 className="text-3xl font-bold text-[#1b3631] mb-4">
                     {content.title}
                   </h1>
@@ -239,7 +254,9 @@ const VerificationCode = () => {
                   onClick={handleContinue}
                   className="w-full h-14 bg-[#1b3631] shrink-0 text-white rounded-[12px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
                 >
-                  {selectedId === 'aadhaar' ? 'Proceed with verification >' : 'Continue'}
+                  {selectedId === "aadhaar"
+                    ? "Proceed with verification >"
+                    : "Continue"}
                 </button>
 
                 {/* Footer Link */}
@@ -250,7 +267,7 @@ const VerificationCode = () => {
                 )}
 
                 {/* DL Step Text */}
-                {selectedId === 'dl' && (
+                {selectedId === "dl" && (
                   <p className="text-[10px] text-[#94a3b8] mt-3 font-bold uppercase tracking-widest">
                     {content.stepText}
                   </p>
@@ -260,7 +277,7 @@ const VerificationCode = () => {
               <div className="flex-1" />
 
               {/* Bottom Decoration */}
-              {selectedId === 'aadhaar' ? (
+              {selectedId === "aadhaar" ? (
                 <>
                   <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
                     <Lock size={12} />
@@ -272,7 +289,7 @@ const VerificationCode = () => {
                     <span>POWERED BY 1Pass</span>
                   </div>
                 </>
-              ) : selectedId === 'dl' ? (
+              ) : selectedId === "dl" ? (
                 <div className="mt-6 flex flex-col items-center gap-4">
                   <div className="flex items-center justify-center gap-2 text-[#94a3b8] text-[9px] font-extrabold uppercase tracking-[0.2em]">
                     <Lock size={12} />
@@ -287,7 +304,7 @@ const VerificationCode = () => {
               )}
 
               {/* Pagination dots for Voter screen */}
-              {selectedId === 'voter' && (
+              {selectedId === "voter" && (
                 <div className="mt-6 flex gap-2 justify-center pb-4">
                   <div className="w-8 h-1 bg-[#e2e8f0] rounded-full" />
                   <div className="w-8 h-1 bg-[#1b3631] rounded-full" />
@@ -308,7 +325,9 @@ const VerificationCode = () => {
   function renderCodeView() {
     return (
       <div className="flex flex-col h-full bg-white pt-5">
-        <h1 className="text-2xl text-brand mb-2 font-bold">{VERIFICATION_UI.TITLE}</h1>
+        <h1 className="text-2xl text-brand mb-2 font-bold">
+          {VERIFICATION_UI.TITLE}
+        </h1>
 
         <p className="text-sm text-gray-500 mb-10 leading-[20px]">
           {VERIFICATION_UI.DESCRIPTION}

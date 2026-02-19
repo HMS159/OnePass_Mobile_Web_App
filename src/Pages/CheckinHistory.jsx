@@ -10,15 +10,17 @@ const CheckinHistory = () => {
 
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
-      {/* <MobileHeader /> */}
-
-      {/* Header with Logo centered and Avatar on right */}
-      <div className="relative flex items-center justify-center" style={{ marginTop: "40px" }}>
-        <img src={Logo} alt="1Pass Logo" className="h-15 object-contain" />
-        <div className="absolute right-0 w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-300 transition">
-          <User size={20} className="text-gray-600" />
-        </div>
-      </div>
+      <MobileHeader
+        showBack={false}
+        rightComponent={
+          <div
+            onClick={() => navigate("/profile")}
+            className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-300 active:scale-95 transition-all"
+          >
+            <User size={20} className="text-gray-600" />
+          </div>
+        }
+      />
 
       {/* Title */}
       <h1 className="text-2xl text-brand mb-2">{HISTORY_UI.TITLE}</h1>
