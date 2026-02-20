@@ -52,11 +52,21 @@ const EmailVerification = () => {
 
     // ⏳ Navigate after delay
     setTimeout(() => {
-      navigate("/consent", {
+      const businessType = location.state?.businessType;
+      const businessPlan = location.state?.businessPlan;
+
+      const isSMBOrEnterprise =
+        businessPlan === "SMB" || businessPlan === "Enterprise";
+
+      const shouldGoToIdVerification =
+        (businessType === "Corporate" || businessType === "Hospitality") &&
+        isSMBOrEnterprise;
+
+      navigate(shouldGoToIdVerification ? "/id-verification" : "/consent", {
         state: {
           email,
-          businessType: location.state?.businessType,
-          businessPlan: location.state?.businessPlan,
+          businessType,
+          businessPlan,
         },
       });
     }, 3000);

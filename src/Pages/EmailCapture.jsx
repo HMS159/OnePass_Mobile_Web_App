@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MobileHeader from "../Components/MobileHeader";
 import { EMAIL_CAPTURE_UI } from "../constants/ui";
-import { ShieldCheck, ChevronDown, Home, Shield, User } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const EmailCapture = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [selectedId, setSelectedId] = useState("");
   const [businessType, setBusinessType] = useState("Hospitality");
   const [businessPlan, setBusinessPlan] = useState("Starter");
 
@@ -21,57 +20,48 @@ const EmailCapture = () => {
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  /* =========================
-     UI CONDITIONS
-  ========================== */
-
   const isSMBOrEnterprise =
     businessPlan === "SMB" || businessPlan === "Enterprise";
 
-  const isCorporateStarter =
+  const shouldShowIdVerification =
+    (businessType === "Corporate" || businessType === "Hospitality") &&
+    isSMBOrEnterprise;
+
+  const shouldShowCorporatePrivacy =
     businessType === "Corporate" && businessPlan === "Starter";
 
-  // Show ID dropdown
-  const shouldShowIdVerification =
-    (businessType === "Hospitality" || businessType === "Corporate") &&
-    isSMBOrEnterprise;
+  const isFormValid = isValidEmail;
 
-  // Show description
-  const shouldShowDescription = businessPlan === "Starter";
+  const handleContinue = () => {
+    if (!isFormValid) return;
 
-  // Show email help text
-  const shouldShowEmailHelp =
-    (businessType === "Corporate" || businessType === "Hospitality") &&
-    isSMBOrEnterprise;
+    // Save email
+    localStorage.setItem("visitorEmail", email);
 
-  // Corporate styled privacy
-  const shouldShowCorporatePrivacy = isCorporateStarter;
-
-  const isFormValid = shouldShowIdVerification
-    ? isValidEmail && selectedId !== ""
-    : isValidEmail;
-
-  const shouldShowYourDetailsTitle =
-    (businessType === "Corporate" || businessType === "Hospitality") &&
-    businessPlan !== "Starter";
+    // If SMB/Enterprise → go to ID page
+    if (shouldShowIdVerification) {
+      navigate("/email-verification", {
+        state: { email, businessType, businessPlan },
+      });
+    } else {
+      // Starter → skip ID page
+      navigate("/email-verification", {
+        state: { email, businessType, businessPlan },
+      });
+    }
+  };
 
   return (
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
-
       {/* Title */}
-
       <h1 className="mb-3 text-3xl font-bold text-[#1b3631]">
-        {shouldShowYourDetailsTitle ? "Your details" : EMAIL_CAPTURE_UI.TITLE}
+        {EMAIL_CAPTURE_UI.TITLE}
       </h1>
-
       {/* Description */}
-      {shouldShowDescription && (
-        <p className="text-gray-500 text-sm mb-6 leading-[20px]">
-          {EMAIL_CAPTURE_UI.DESCRIPTION}
-        </p>
-      )}
-
+      <p className="text-gray-500 text-sm mb-6 leading-[20px]">
+        {EMAIL_CAPTURE_UI.DESCRIPTION}
+      </p>
       {/* Form */}
       <div className="space-y-6">
         {/* Email */}
@@ -103,51 +93,9 @@ const EmailCapture = () => {
               }
             `}
           />
-
-          {shouldShowEmailHelp && (
-            <p className="text-[11px] text-gray-400 mt-2 leading-relaxed">
-              Your email is required for digital receipts and visit records.
-            </p>
-          )}
         </div>
-
-        {/* ID Verification */}
-        {shouldShowIdVerification && (
-          <div>
-            <label className="block text-xs font-bold text-[#1b3631] tracking-wide mb-2">
-              Choose an ID for verification
-            </label>
-
-            <div className="relative">
-              <select
-                value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                className="w-full bg-white text-sm h-12 rounded-[6px] border border-gray-200 px-4 appearance-none outline-none focus:border-gray-300"
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                <option value="aadhaar">Aadhaar Card</option>
-                <option value="passport">Passport</option>
-                <option value="voter">Voter ID</option>
-                <option value="dl">Driving License</option>
-              </select>
-
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                <ChevronDown size={18} />
-              </div>
-            </div>
-
-            <p className="text-[11px] text-gray-400 mt-2 leading-relaxed italic">
-              You will be guided to securely verify the selected ID in the next
-              step.
-            </p>
-          </div>
-        )}
       </div>
-
       <div className="flex-1" />
-
       {/* Footer */}
       <div className="mt-8">
         <div
@@ -168,23 +116,24 @@ const EmailCapture = () => {
               shouldShowCorporatePrivacy ? "text-gray-500" : "text-gray-400"
             }`}
           >
-            {shouldShowCorporatePrivacy
-              ? EMAIL_CAPTURE_UI.PRIVACY_TEXT
-              : "Privacy Policy: Your email and ID are collected only for visitor verification and access control."}
+            {shouldShowCorporatePrivacy ? (
+              EMAIL_CAPTURE_UI.PRIVACY_TEXT
+            ) : (
+              <>
+                Your data is processed securely and encrypted. We never share
+                your personal information with third parties.
+                <span className="font-bold text-black">
+                  View our Privacy Policy.
+                </span>
+              </>
+            )}
           </p>
         </div>
 
         <button
           disabled={!isFormValid}
-          onClick={() => {
-            if (selectedId) {
-              localStorage.setItem("selectedId", selectedId);
-            }
-            navigate("/email-verification", {
-              state: { email, businessType, businessPlan },
-            });
-          }}
-          className={`w-full h-14 rounded-[8px] font-bold transition flex items-center justify-center gap-2
+          onClick={handleContinue}
+          className={`w-full h-14 rounded-[8px] font-bold transition flex items-center justify-center
             ${
               isFormValid
                 ? "bg-[#1b3631] text-white hover:opacity-95 shadow-lg shadow-black/10"
@@ -192,26 +141,9 @@ const EmailCapture = () => {
             }
           `}
         >
-          {businessType === "Corporate"
-            ? "Verify email →"
-            : EMAIL_CAPTURE_UI.CONTINUE_BUTTON}
+          Continue
         </button>
       </div>
-
-      {/* Corporate Bottom Nav */}
-      {/* {isSMBOrEnterprise && (
-        <div className="mt-8 -mx-4 -mb-5 px-6 py-4 border-t border-gray-100 flex justify-between items-center bg-white">
-          <button className="text-gray-400 p-2">
-            <Home size={22} />
-          </button>
-          <button className="bg-gray-50 p-3 rounded-xl text-[#1b3631]">
-            <Shield size={22} />
-          </button>
-          <button className="text-gray-400 p-2">
-            <User size={22} />
-          </button>
-        </div>
-      )} */}
     </div>
   );
 };

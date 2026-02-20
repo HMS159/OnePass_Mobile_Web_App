@@ -240,7 +240,7 @@ const VerificationCode = () => {
                 {/* Continue Button */}
                 <button
                   onClick={handleContinue}
-                  className="w-full h-14 bg-[#1b3631] shrink-0 text-white rounded-[12px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
+                  className="w-full h-14 bg-[#1b3631] shrink-0 text-white rounded-[6px] font-bold shadow-lg shadow-black/10 flex items-center justify-center gap-2 hover:opacity-95 transition"
                 >
                   {selectedId === "aadhaar"
                     ? "Proceed with verification >"
