@@ -19,7 +19,10 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<MobileLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/:guestNumber/:restaurantId" element={<Home />} />
+        <Route
+          path="/:guestNumber/:restaurantId/:businessTypeCode/:planCode"
+          element={<Home />}
+        />
         <Route path="/email" element={<EmailCapture />} />
         <Route path="/welcome-back" element={<WelcomeBack />} />
         <Route path="/consent" element={<Consent />} />
