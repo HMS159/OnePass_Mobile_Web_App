@@ -329,7 +329,7 @@ const VerificationCode = () => {
 
         <div className="flex-1" />
 
-        <div className="bg-gray-100 rounded-[12px] p-4 mb-4 flex items-start gap-3">
+        <div className="bg-gray-100 rounded-[6px] p-4 mb-4 flex items-start gap-3">
           <ShieldCheck size={16} className="text-brand mt-1 shrink-0" />
           <p className="text-xs text-gray-500 leading-[20px]">
             {VERIFICATION_UI.FOOTER_TEXT}
@@ -338,7 +338,7 @@ const VerificationCode = () => {
 
         <button
           onClick={() => navigate("/success")}
-          className="w-full h-14 bg-brand text-white rounded-[12px] font-semibold shadow-lg hover:opacity-90 transition mb-4"
+          className="w-full h-14 bg-brand text-white rounded-[6px] font-semibold shadow-lg hover:opacity-90 transition mb-4"
         >
           {VERIFICATION_UI.DONE_BUTTON}
         </button>
