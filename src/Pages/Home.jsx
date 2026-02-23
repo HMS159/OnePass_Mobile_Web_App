@@ -3,6 +3,10 @@ import { ArrowRight, Check } from "lucide-react";
 import Logo from "../assets/images/1pass_logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { HOME_UI } from "../constants/ui";
+import GoogleLogo from "../assets/images/Google.png";
+import MicrosoftLogo from "../assets/images/Microsoft.png";
+import AppleLogo from "../assets/images/Apple.png";
+import AmazonLogo from "../assets/images/Amazon.png";
 
 const Home = () => {
   const { guestNumber, restaurantId, businessTypeCode, planCode } = useParams();
@@ -16,6 +20,15 @@ const Home = () => {
     3: "Apple Park",
     4: "Amazon Spheres",
   };
+
+  const propertyLogos = {
+    1: GoogleLogo,
+    2: MicrosoftLogo,
+    3: AppleLogo,
+    4: AmazonLogo,
+  };
+
+  const propertyLogo = propertyLogos[restaurantId];
 
   const propertyName = restaurants[restaurantId] || "Sunrise Diner";
 
@@ -109,9 +122,15 @@ const Home = () => {
         />
 
         {/* Property Badge */}
-        <div className="w-10 h-10 rounded-full bg-[#1b3631] text-white flex items-center justify-center text-sm font-semibold">
-          {propertyName.charAt(0)}
-        </div>
+        {propertyLogo && (
+          <div className="w-15 h-15 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden">
+            <img
+              src={propertyLogo}
+              alt={propertyName}
+              className="w-8 h-8 object-contain"
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex-1 flex flex-col justify-center text-center">
