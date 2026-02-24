@@ -3,7 +3,6 @@ import { ArrowRight, Check } from "lucide-react";
 import Logo from "../assets/images/1pass_logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import propertyService from "../services/propertyService";
-import tenantService from "../services/tenantService";
 import { HOME_UI } from "../constants/ui";
 import GoogleLogo from "../assets/images/Google.png";
 import MicrosoftLogo from "../assets/images/Microsoft.png";
@@ -39,7 +38,6 @@ const Home = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [verifiedUser, setVerifiedUser] = useState(null);
   const [propertyData, setPropertyData] = useState(null);
-  const [tenantData, setTenantData] = useState(null);
 
   // 🔹 Map Plan Code
   useEffect(() => {
@@ -90,24 +88,16 @@ const Home = () => {
 
   // Fetch property details (hardcoded id = 6 for now)
   useEffect(() => {
-    const propId = restaurantId ? Number(restaurantId) : 6;
+    const propertyId = 6; // ✅ Always send 6
 
     propertyService
-      .getPropertyById(propId)
+      .getPropertyById(propertyId)
       .then((data) => {
-        console.log("Property response:", data);
+        console.log("🏨 Property response:", data);
         setPropertyData(data);
       })
       .catch((err) => console.error("Failed to fetch property:", err));
-
-    tenantService
-      .getTenantById(propId)
-      .then((t) => {
-        console.log("Tenant response:", t);
-        setTenantData(t);
-      })
-      .catch((err) => console.error("Failed to fetch tenant:", err));
-  }, [restaurantId]);
+  }, []);
 
   const handleContinue = () => {
     localStorage.setItem("businessType", businessType);
@@ -136,6 +126,7 @@ const Home = () => {
   };
 
   const displayPropertyName = propertyData?.name || propertyName;
+  console.log(displayPropertyName);
 
   return (
     <div className="h-dvh w-full bg-white flex flex-col px-4 py-5">
