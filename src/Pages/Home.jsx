@@ -11,7 +11,7 @@ import AppleLogo from "../assets/images/Apple.png";
 import AmazonLogo from "../assets/images/Amazon.png";
 
 const Home = () => {
-  const { guestNumber, restaurantId, businessTypeCode, planCode } = useParams();
+  const { guestNumber, restaurantId } = useParams();
   const navigate = useNavigate();
 
   const VERIFIED_NUMBER = "8401159610";
