@@ -3,6 +3,7 @@ import { ArrowRight, Check } from "lucide-react";
 import Logo from "../assets/images/1pass_logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import propertyService from "../services/propertyService";
+import tenantService from "../services/tenantService";
 import { HOME_UI } from "../constants/ui";
 import GoogleLogo from "../assets/images/Google.png";
 import MicrosoftLogo from "../assets/images/Microsoft.png";
@@ -39,33 +40,6 @@ const Home = () => {
   const [verifiedUser, setVerifiedUser] = useState(null);
   const [propertyData, setPropertyData] = useState(null);
 
-  // 🔹 Map Plan Code
-  useEffect(() => {
-    if (!businessTypeCode || !planCode) return;
-
-    const typeMap = {
-      1: "Corporate",
-      2: "Hospitality",
-    };
-
-    const planMap = {
-      1: "Starter",
-      2: "SMB",
-      3: "Enterprise",
-    };
-
-    const selectedType = typeMap[businessTypeCode];
-    let selectedPlan = planMap[planCode];
-
-    // 🚫 Prevent Starter for Hospitality
-    if (selectedType === "Hospitality" && planCode === "1") {
-      selectedPlan = "SMB"; // Auto fallback
-    }
-
-    setBusinessType(selectedType);
-    setBusinessPlan(selectedPlan);
-  }, [businessTypeCode, planCode]);
-
   // 🔹 Verification Logic
   useEffect(() => {
     if (!guestNumber) return;
@@ -94,9 +68,34 @@ const Home = () => {
       .getPropertyById(propertyId)
       .then((data) => {
         console.log("🏨 Property response:", data);
+
         setPropertyData(data);
+
+        // ✅ Set business type from API
+        if (data?.propertyType) {
+          setBusinessType(data.propertyType);
+        }
+
+        // ✅ Set business plan from API
+        if (data?.tier) {
+          let plan = data.tier;
+
+          // 🚫 Prevent Starter for Hospitality (if required)
+          if (data.propertyType === "Hospitality" && plan === "Starter") {
+            plan = "SMB";
+          }
+
+          setBusinessPlan(plan);
+        }
       })
       .catch((err) => console.error("Failed to fetch property:", err));
+
+    tenantService
+      .getTenantById(6)
+      .then((data) => {
+        console.log("Tenant response:", data);
+      })
+      .catch(console.error);
   }, []);
 
   const handleContinue = () => {
