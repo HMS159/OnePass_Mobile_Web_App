@@ -4,35 +4,12 @@ import Logo from "../assets/images/1pass_logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import propertyService from "../services/propertyService";
 import tenantService from "../services/tenantService";
+import guestService from "../services/guestService";
 import { HOME_UI } from "../constants/ui";
-import GoogleLogo from "../assets/images/Google.png";
-import MicrosoftLogo from "../assets/images/Microsoft.png";
-import AppleLogo from "../assets/images/Apple.png";
-import AmazonLogo from "../assets/images/Amazon.png";
 
 const Home = () => {
   const { guestNumber, restaurantId } = useParams();
   const navigate = useNavigate();
-
-  const VERIFIED_NUMBER = "8401159610";
-
-  const restaurants = {
-    1: "Google HQ",
-    2: "Microsoft Office",
-    3: "Apple Park",
-    4: "Amazon Spheres",
-  };
-
-  const propertyLogos = {
-    1: GoogleLogo,
-    2: MicrosoftLogo,
-    3: AppleLogo,
-    4: AmazonLogo,
-  };
-
-  const propertyLogo = propertyLogos[restaurantId];
-
-  const propertyName = restaurants[restaurantId] || "Sunrise Diner";
 
   const [businessType, setBusinessType] = useState("");
   const [businessPlan, setBusinessPlan] = useState("");
@@ -40,29 +17,53 @@ const Home = () => {
   const [verifiedUser, setVerifiedUser] = useState(null);
   const [propertyData, setPropertyData] = useState(null);
 
-  // 🔹 Verification Logic
+  const [tenantData, setTenantData] = useState(null);
+  const [tenantLogo, setTenantLogo] = useState(null);
+
+  // 🔹 Fetch Guest By Phone
   useEffect(() => {
     if (!guestNumber) return;
 
-    const last10Digits = guestNumber.slice(-10);
+    const fetchGuest = async () => {
+      try {
+        // Format: "91-9586023883"
+        const [country, phone] = guestNumber.split("-");
 
-    if (last10Digits === VERIFIED_NUMBER) {
-      setIsVerified(true);
+        const countryCode = `${country}`;
+        const phoneNumber = phone;
 
-      setVerifiedUser({
-        name: "Hafiz Shaikh",
-        email: "hafiz@email.com",
-        phone: `+91 ••••••${last10Digits.slice(-4)}`,
-      });
-    } else {
-      setIsVerified(false);
-      setVerifiedUser(null);
-    }
+        const data = await guestService.getGuestByPhone(
+          countryCode,
+          phoneNumber,
+        );
+
+        if (data.verificationStatus === "verified") {
+          console.log("👤 Guest found:", data);
+
+          setIsVerified(true);
+          setVerifiedUser({
+            name: data.fullName,
+            email: data.email,
+            phone: `${countryCode} ••••••${phoneNumber.slice(-4)}`,
+          });
+        } else {
+          console.log("Guest not found");
+          setIsVerified(false);
+          setVerifiedUser(null);
+        }
+      } catch (err) {
+        console.error("Error fetching guest:", err);
+        setIsVerified(false);
+        setVerifiedUser(null);
+      }
+    };
+
+    fetchGuest();
   }, [guestNumber]);
 
   // Fetch property details (hardcoded id = 6 for now)
   useEffect(() => {
-    const propertyId = 6; // ✅ Always send 6
+    const propertyId = restaurantId; // ✅ Always send 6
 
     propertyService
       .getPropertyById(propertyId)
@@ -94,6 +95,14 @@ const Home = () => {
       .getTenantById(6)
       .then((data) => {
         console.log("Tenant response:", data);
+
+        setTenantData(data);
+
+        // ✅ Convert Base64 logo to usable image src
+        if (data?.logo && data?.logoContentType) {
+          const imageSrc = `data:${data.logoContentType};base64,${data.logo}`;
+          setTenantLogo(imageSrc);
+        }
       })
       .catch(console.error);
   }, []);
@@ -103,10 +112,23 @@ const Home = () => {
     localStorage.setItem("businessPlan", businessPlan);
     localStorage.setItem("isVerifiedUser", isVerified);
 
+    // 🔹 Convert 91-9586023883 → +919586023883
+    let fullPhoneNumber = "";
+
+    if (guestNumber) {
+      const [country, phone] = guestNumber.split("-");
+      fullPhoneNumber = `+${country}${phone}`;
+      console.log("Guest Full Number", fullPhoneNumber);
+    }
+
     if (isVerified) {
-      navigate("/consent");
+      navigate("/consent", {
+        state: { phoneNumber: fullPhoneNumber },
+      });
     } else {
-      navigate("/email");
+      navigate("/email", {
+        state: { phoneNumber: fullPhoneNumber },
+      });
     }
   };
 
@@ -124,7 +146,7 @@ const Home = () => {
       .toUpperCase();
   };
 
-  const displayPropertyName = propertyData?.name || propertyName;
+  const displayPropertyName = propertyData?.name;
   console.log(displayPropertyName);
 
   return (
@@ -139,12 +161,12 @@ const Home = () => {
         />
 
         {/* Property Badge */}
-        {propertyLogo && (
+        {tenantLogo && (
           <div className="w-15 h-15 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden">
             <img
-              src={propertyLogo}
-              alt={propertyName}
-              className="w-8 h-8 object-contain"
+              src={tenantLogo}
+              alt={tenantData?.name}
+              className="w-15 h-15 object-contain"
             />
           </div>
         )}
@@ -160,9 +182,9 @@ const Home = () => {
         <h1 className="text-3xl font-bold text-[#1b3631] leading-snug mb-8">
           {isVerified
             ? "Welcome back at"
-            : HOME_UI.getTitle(propertyName).line1}
+            : HOME_UI.getTitle(displayPropertyName).line1}
           <br />
-          <span>{propertyName}</span>
+          <span>{displayPropertyName}</span>
         </h1>
 
         {/* Content */}
@@ -208,7 +230,7 @@ const Home = () => {
           </>
         ) : (
           <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
-            {HOME_UI.getDescription(propertyName, maskedNumber)}
+            {HOME_UI.getDescription(displayPropertyName, maskedNumber)}
           </p>
         )}
       </div>
