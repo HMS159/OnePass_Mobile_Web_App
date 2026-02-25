@@ -1,4 +1,4 @@
-import apiClient from "./apiClient"; // adjust if needed
+import api from "./api.js"; // adjust if needed
 import API_ENDPOINTS from "../constants/config";
 
 /**
@@ -8,13 +8,10 @@ export const verifyDigilockerAccount = async (verificationId, mobileNumber) => {
   try {
     console.log("🔍 Verifying DigiLocker account...");
 
-    const response = await apiClient.post(
-      API_ENDPOINTS.DIGILOCKER_VERIFY_ACCOUNT,
-      {
-        verification_id: verificationId,
-        mobile_number: mobileNumber,
-      },
-    );
+    const response = await api.post(API_ENDPOINTS.DIGILOCKER_VERIFY_ACCOUNT, {
+      verification_id: verificationId,
+      mobile_number: mobileNumber,
+    });
 
     console.log("✅ DigiLocker verification successful");
     return response.data; // ✅ Always return data

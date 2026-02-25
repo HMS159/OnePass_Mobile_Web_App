@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
+import { verifyDigilockerAccount } from "../services/digilockerService";
 
 const IdVerification = () => {
   const navigate = useNavigate();
@@ -8,15 +9,66 @@ const IdVerification = () => {
 
   const { email, businessType, businessPlan } = location.state || {};
   const [selectedId, setSelectedId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const isValid = selectedId !== "";
 
+  const handleProceed = async () => {
+    try {
+      setIsLoading(true);
+
+      // ✅ Get phone data from localStorage
+      const phoneNumber = localStorage.getItem("phoneNumber");
+      const countryCode = localStorage.getItem("phoneCountryCode"); // make sure you store this during login
+
+      if (!phoneNumber || !countryCode) {
+        alert("Phone details not found. Please login again.");
+        return;
+      }
+
+      // ✅ Generate verification ID
+      const verificationId =
+        "VER-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+      console.log("Generated Verification ID:", verificationId);
+
+      // ✅ Call API
+      const response = await verifyDigilockerAccount(
+        verificationId,
+        phoneNumber,
+      );
+
+      console.log("API Response:", response);
+
+      // ✅ Create single object
+      const digilockerData = {
+        verificationId,
+        countryCode,
+        phoneNumber,
+        digilockerResponse: response,
+      };
+
+      // ✅ Store in ONE localStorage key
+      localStorage.setItem("digilockerData", JSON.stringify(digilockerData));
+
+      // Optional: store selectedId if needed
+      localStorage.setItem("selectedId", selectedId);
+
+      // ✅ Navigate
+      navigate("/consent", {
+        state: { email, businessType, businessPlan },
+      });
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
-      {/* ✅ Using MobileHeader only */}
       <MobileHeader />
 
-      {/* Title */}
       <h1 className="text-2xl font-bold text-[#1b3631] mb-2">
         Choose an ID for verification
       </h1>
@@ -26,7 +78,6 @@ const IdVerification = () => {
         digital service to validate this document.
       </p>
 
-      {/* Dropdown */}
       <div>
         <label className="block text-xs font-bold text-[#1b3631] tracking-wide mb-2">
           Identity Document Type
@@ -51,27 +102,20 @@ const IdVerification = () => {
 
       <div className="flex-1" />
 
-      {/* Button */}
       <button
-        disabled={!isValid}
-        onClick={() => {
-          localStorage.setItem("selectedId", selectedId);
-          navigate("/consent", {
-            state: { email, businessType, businessPlan },
-          });
-        }}
+        disabled={!isValid || isLoading}
+        onClick={handleProceed}
         className={`w-full h-14 rounded-[6px] font-bold transition
           ${
-            isValid
+            isValid && !isLoading
               ? "bg-[#1b3631] text-white shadow-lg"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }
         `}
       >
-        Proceed Securely
+        {isLoading ? "Verifying..." : "Proceed Securely"}
       </button>
 
-      {/* Footer */}
       <p className="text-[10px] text-gray-400 text-center mt-4 uppercase tracking-wider">
         Encrypted & Secure iPass Check-in
       </p>
