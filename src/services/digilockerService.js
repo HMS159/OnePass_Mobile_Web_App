@@ -39,6 +39,65 @@ export const verifyDigilockerAccount = async (verificationId, mobileNumber) => {
   }
 };
 
+/**
+ * Create DigiLocker URL for document sharing
+ */
+export const createDigilockerUrl = async (
+  verificationId,
+  documentRequested = ["AADHAAR"],
+  redirectUrl,
+  userFlow,
+) => {
+  try {
+    console.log("🔗 Creating DigiLocker URL...");
+
+    const payload = {
+      verification_id: verificationId,
+      document_requested: documentRequested,
+      redirect_url: redirectUrl,
+      user_flow: userFlow,
+    };
+
+    console.log("📤 POST:", API_ENDPOINTS.DIGILOCKER_CREATE_URL);
+    console.log("📦 Payload:", payload);
+
+    const response = await api.post(
+      API_ENDPOINTS.DIGILOCKER_CREATE_URL,
+      payload,
+    );
+
+    console.log("✅ DigiLocker URL created:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ DigiLocker create URL error:",
+      error.response?.data || error.message,
+    );
+
+    if (error.response?.status === 400) {
+      throw new Error("Invalid DigiLocker request parameters");
+    }
+
+    if (error.response?.status === 404) {
+      throw new Error("DigiLocker create URL endpoint not found");
+    }
+
+    if (error.response?.status === 422) {
+      throw new Error("Invalid document type or request format");
+    }
+
+    if (error.response?.status === 500) {
+      throw new Error("DigiLocker service temporarily unavailable");
+    }
+
+    throw new Error(
+      error.response?.data?.message || "Failed to create DigiLocker URL",
+    );
+  }
+};
+
 export default {
   verifyDigilockerAccount,
+  createDigilockerUrl,
 };

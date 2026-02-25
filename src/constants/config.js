@@ -4,6 +4,7 @@ export const ENDPOINTS = {
   HOTEL_GUEST_BY_PHONE: "/HotelGuestRead/guest_by_id",
   UPDATE_EMAIL: "/guest/persist/email/update",
   DIGILOCKER_VERIFY_ACCOUNT: "/digilocker/verify-account",
+  DIGILOCKER_CREATE_URL: "/digilocker/create-url",
 };
 
 export default ENDPOINTS;

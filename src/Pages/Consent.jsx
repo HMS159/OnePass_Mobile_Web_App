@@ -56,6 +56,8 @@ const Consent = () => {
   const handleContinue = () => {
     if (shouldRedirectToFaceMatch) {
       navigate("/face-match");
+    } else if (shouldShowStarterConsent) {
+      navigate("/verification-code");
     } else {
       navigate("/verification");
     }

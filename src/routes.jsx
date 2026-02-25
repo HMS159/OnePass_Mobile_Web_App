@@ -7,6 +7,7 @@ import Consent from "./Pages/Consent.jsx";
 import VerificationCode from "./Pages/VerificationCode.jsx";
 import FaceMatch from "./Pages/FaceMatch.jsx";
 import VerificationDone from "./Pages/VerificationDone.jsx";
+import VerificationCodePage from "./Pages/VerificationCodePage.jsx";
 import CheckinSuccess from "./Pages/CheckinSuccess.jsx";
 import CheckinHistory from "./Pages/CheckinHistory.jsx";
 import WelcomeBack from "./Pages/WelcomeBack.jsx";
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         <Route path="/welcome-back" element={<WelcomeBack />} />
         <Route path="/consent" element={<Consent />} />
         <Route path="/verification" element={<VerificationCode />} />
+        <Route path="/verification-code" element={<VerificationCodePage />} />
         <Route path="/face-match" element={<FaceMatch />} />
         <Route path="/verification-done" element={<VerificationDone />} />
         <Route path="/success" element={<CheckinSuccess />} />

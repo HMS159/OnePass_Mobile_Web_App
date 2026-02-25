@@ -61,51 +61,60 @@ const Home = () => {
     fetchGuest();
   }, [guestNumber]);
 
-  // Fetch property details (hardcoded id = 6 for now)
   useEffect(() => {
-    const propertyId = restaurantId; // ✅ Always send 6
+    const fetchData = async () => {
+      try {
+        const propertyId = restaurantId; // or 6 if fixed
 
-    propertyService
-      .getPropertyById(propertyId)
-      .then((data) => {
-        console.log("🏨 Property response:", data);
+        // ✅ 1. Get Property
+        const propertyData = await propertyService.getPropertyById(propertyId);
+        console.log("🏨 Property response:", propertyData);
 
-        setPropertyData(data);
+        setPropertyData(propertyData);
 
-        // ✅ Set business type from API
-        if (data?.propertyType) {
-          setBusinessType(data.propertyType);
+        // ✅ Set business type
+        if (propertyData?.propertyType) {
+          setBusinessType("Corporate"); // or propertyData.propertyType
         }
 
-        // ✅ Set business plan from API
-        if (data?.tier) {
-          let plan = data.tier;
+        // ✅ Set business plan
+        if (propertyData?.tier) {
+          let plan = propertyData.tier;
 
-          // 🚫 Prevent Starter for Hospitality (if required)
-          if (data.propertyType === "Hospitality" && plan === "Starter") {
+          if (
+            propertyData.propertyType === "Hospitality" &&
+            plan === "Starter"
+          ) {
             plan = "SMB";
           }
 
           setBusinessPlan(plan);
         }
-      })
-      .catch((err) => console.error("Failed to fetch property:", err));
 
-    tenantService
-      .getTenantById(6)
-      .then((data) => {
-        console.log("Tenant response:", data);
+        // ✅ 2. Get tenantId from property response
+        const tenantId = propertyData?.tenantId;
 
-        setTenantData(data);
+        if (tenantId) {
+          const tenantData = await tenantService.getTenantById(tenantId);
+          console.log("🏢 Tenant response:", tenantData);
 
-        // ✅ Convert Base64 logo to usable image src
-        if (data?.logo && data?.logoContentType) {
-          const imageSrc = `data:${data.logoContentType};base64,${data.logo}`;
-          setTenantLogo(imageSrc);
+          setTenantData(tenantData);
+
+          // ✅ Convert Base64 logo
+          if (tenantData?.logo && tenantData?.logoContentType) {
+            const imageSrc = `data:${tenantData.logoContentType};base64,${tenantData.logo}`;
+            setTenantLogo(imageSrc);
+          }
+        } else {
+          console.warn("No tenantId found in property response");
         }
-      })
-      .catch(console.error);
-  }, []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [restaurantId]);
 
   const handleContinue = () => {
     localStorage.setItem("businessType", businessType);
@@ -119,6 +128,7 @@ const Home = () => {
       const [country, phone] = guestNumber.split("-");
       fullPhoneNumber = `+${country}${phone}`;
       console.log("Guest Full Number", fullPhoneNumber);
+      localStorage.setItem("visitorPhone", fullPhoneNumber);
     }
 
     if (isVerified) {
@@ -238,7 +248,7 @@ const Home = () => {
       {/* Button */}
       <button
         onClick={handleContinue}
-        className="w-full h-14 bg-[#1b3631] text-white rounded-md font-semibold text-md flex items-center justify-center gap-2 active:scale-95 transition-all"
+        className="w-full h-14 bg-[#1b3631] text-white rounded-md font-semibold text-md flex items-center justify-center gap-2 active:scale-95 transition-all shrink-0"
       >
         {HOME_UI.CONTINUE_BUTTON}
         <ArrowRight size={18} />

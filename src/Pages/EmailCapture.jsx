@@ -15,7 +15,9 @@ const EmailCapture = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // ✅ Get phone number from Home page
-  const fullPhoneNumber = location.state?.phoneNumber;
+  const fullPhoneNumber =
+    location.state?.phoneNumber || localStorage.getItem("visitorPhone");
+  console.log(fullPhoneNumber);
 
   useEffect(() => {
     const type = localStorage.getItem("businessType") || "Hospitality";

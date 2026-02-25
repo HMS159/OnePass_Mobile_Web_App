@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
+      allowedHosts: [".ngrok-free.app"],
       port: 5173,
       proxy: {
         // Proxy any request starting with /api to the backend defined in API_TARGET
