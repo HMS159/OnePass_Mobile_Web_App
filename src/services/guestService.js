@@ -29,13 +29,13 @@ export const getGuestByPhone = async (phoneCountryCode, phoneNumber) => {
 export const updateGuestEmail = async (
   phoneCountryCode,
   phoneNumber,
-  email,
+  emailAddress,
 ) => {
   try {
-    const response = await api.post(ENDPOINTS.UPDATE_EMAIL, {
+    const response = await api.put(ENDPOINTS.UPDATE_EMAIL, {
       phoneCountryCode,
       phoneNumber,
-      email,
+      emailAddress,
     });
 
     return response.data; // ✅ always return data

@@ -2,13 +2,20 @@ import React, { useState, useEffect } from "react";
 import MobileHeader from "../Components/MobileHeader";
 import { EMAIL_CAPTURE_UI } from "../constants/ui";
 import { ShieldCheck } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { updateGuestEmail } from "../services/guestService"; // ✅ adjust path
 
 const EmailCapture = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [email, setEmail] = useState("");
   const [businessType, setBusinessType] = useState("Hospitality");
   const [businessPlan, setBusinessPlan] = useState("Starter");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // ✅ Get phone number from Home page
+  const fullPhoneNumber = location.state?.phoneNumber;
 
   useEffect(() => {
     const type = localStorage.getItem("businessType") || "Hospitality";
@@ -32,39 +39,65 @@ const EmailCapture = () => {
 
   const isFormValid = isValidEmail;
 
-  const handleContinue = () => {
-    if (!isFormValid) return;
+  // ✅ Split country code + phone number
+  const extractPhoneData = (phone) => {
+    if (!phone) return {};
 
-    // Save email
-    localStorage.setItem("visitorEmail", email);
+    const cleaned = phone.replace("+", "");
 
-    // If SMB/Enterprise → go to ID page
-    if (shouldShowIdVerification) {
+    // Example: +919876543210
+    const phoneCountryCode = cleaned.slice(0, 2); // adjust if needed
+    const phoneNumber = cleaned.slice(2);
+
+    return { phoneCountryCode, phoneNumber };
+  };
+
+  const handleContinue = async () => {
+    if (!isFormValid || !fullPhoneNumber) return;
+
+    try {
+      setIsLoading(true);
+
+      const { phoneCountryCode, phoneNumber } =
+        extractPhoneData(fullPhoneNumber);
+
+      // ✅ Call API
+      await updateGuestEmail(phoneCountryCode, phoneNumber, email);
+
+      // Save email locally
+      localStorage.setItem("visitorEmail", email);
+      localStorage.setItem("phoneCountryCode", phoneCountryCode);
+      localStorage.setItem("phoneNumber", phoneNumber);
+
+      // ✅ Navigate after success
       navigate("/email-verification", {
-        state: { email, businessType, businessPlan },
+        state: {
+          email,
+          businessType,
+          businessPlan,
+          phoneNumber: fullPhoneNumber,
+        },
       });
-    } else {
-      // Starter → skip ID page
-      navigate("/email-verification", {
-        state: { email, businessType, businessPlan },
-      });
+    } catch (error) {
+      console.error("Email update failed:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
-      {/* Title */}
+
       <h1 className="mb-3 text-3xl font-bold text-[#1b3631]">
         {EMAIL_CAPTURE_UI.TITLE}
       </h1>
-      {/* Description */}
+
       <p className="text-gray-500 text-sm mb-6 leading-[20px]">
         {EMAIL_CAPTURE_UI.DESCRIPTION}
       </p>
-      {/* Form */}
+
       <div className="space-y-6">
-        {/* Email */}
         <div>
           <label className="block text-xs font-bold text-[#1b3631] tracking-wide mb-2">
             {businessType === "Corporate"
@@ -95,8 +128,9 @@ const EmailCapture = () => {
           />
         </div>
       </div>
+
       <div className="flex-1" />
-      {/* Footer */}
+
       <div className="mt-8">
         <div
           className={`p-4 rounded-lg flex items-start gap-4 mb-8 ${
@@ -111,27 +145,13 @@ const EmailCapture = () => {
               shouldShowCorporatePrivacy ? "text-[#1b3631]" : "text-gray-400"
             } mt-1 shrink-0`}
           />
-          <p
-            className={`text-[10px] leading-relaxed uppercase tracking-wider font-bold ${
-              shouldShowCorporatePrivacy ? "text-gray-500" : "text-gray-400"
-            }`}
-          >
-            {shouldShowCorporatePrivacy ? (
-              EMAIL_CAPTURE_UI.PRIVACY_TEXT
-            ) : (
-              <>
-                Your data is processed securely and encrypted. We never share
-                your personal information with third parties.
-                <span className="font-bold text-black">
-                  View our Privacy Policy.
-                </span>
-              </>
-            )}
+          <p className="text-[10px] leading-relaxed uppercase tracking-wider font-bold text-gray-400">
+            Your data is processed securely and encrypted.
           </p>
         </div>
 
         <button
-          disabled={!isFormValid}
+          disabled={!isFormValid || isLoading}
           onClick={handleContinue}
           className={`w-full h-14 rounded-[8px] font-bold transition flex items-center justify-center
             ${
@@ -141,7 +161,7 @@ const EmailCapture = () => {
             }
           `}
         >
-          Continue
+          {isLoading ? "Updating..." : "Continue"}
         </button>
       </div>
     </div>
