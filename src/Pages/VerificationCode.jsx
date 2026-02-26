@@ -21,10 +21,10 @@ const VerificationSelection = () => {
   const [selectedId, setSelectedId] = useState("aadhaar");
 
   useEffect(() => {
-    setBusinessType(localStorage.getItem("businessType") || "Hospitality");
-    setBusinessPlan(localStorage.getItem("businessPlan") || "");
-    setIsVerifiedUser(localStorage.getItem("isVerifiedUser") === "true");
-    setSelectedId(localStorage.getItem("selectedId") || "aadhaar");
+    setBusinessType(sessionStorage.getItem("businessType") || "Hospitality");
+    setBusinessPlan(sessionStorage.getItem("businessPlan") || "");
+    setIsVerifiedUser(sessionStorage.getItem("isVerifiedUser") === "true");
+    setSelectedId(sessionStorage.getItem("selectedId") || "aadhaar");
   }, []);
 
   const isEligibleType = ["corporate", "hospitality"].includes(
@@ -54,7 +54,7 @@ const VerificationSelection = () => {
     try {
       if (selectedId === "aadhaar") {
         const digilockerData = JSON.parse(
-          localStorage.getItem("digilockerData") || "{}",
+          sessionStorage.getItem("digilockerData") || "{}",
         );
         console.log("digilockerData", digilockerData);
 
@@ -92,7 +92,7 @@ const VerificationSelection = () => {
 
         console.log(response);
 
-        localStorage.setItem("digilockerResponse", JSON.stringify(response));
+        sessionStorage.setItem("digilockerResponse", JSON.stringify(response));
 
         const digilockerUrl = response?.url || response?.data?.url;
 

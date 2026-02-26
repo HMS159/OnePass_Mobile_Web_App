@@ -16,12 +16,12 @@ const EmailCapture = () => {
 
   // ✅ Get phone number from Home page
   const fullPhoneNumber =
-    location.state?.phoneNumber || localStorage.getItem("visitorPhone");
+    location.state?.phoneNumber || sessionStorage.getItem("visitorPhone");
   console.log(fullPhoneNumber);
 
   useEffect(() => {
-    const type = localStorage.getItem("businessType") || "Hospitality";
-    const plan = localStorage.getItem("businessPlan") || "Starter";
+    const type = sessionStorage.getItem("businessType") || "Hospitality";
+    const plan = sessionStorage.getItem("businessPlan") || "Starter";
 
     setBusinessType(type);
     setBusinessPlan(plan);
@@ -67,9 +67,9 @@ const EmailCapture = () => {
       await updateGuestEmail(phoneCountryCode, phoneNumber, email);
 
       // Save email locally
-      localStorage.setItem("visitorEmail", email);
-      localStorage.setItem("phoneCountryCode", phoneCountryCode);
-      localStorage.setItem("phoneNumber", phoneNumber);
+      sessionStorage.setItem("visitorEmail", email);
+      sessionStorage.setItem("phoneCountryCode", phoneCountryCode);
+      sessionStorage.setItem("phoneNumber", phoneNumber);
 
       // ✅ Navigate after success
       navigate("/email-verification", {

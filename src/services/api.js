@@ -11,7 +11,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
 
     // Debug: log full request URL and params so we can see if requests are hitting the dev server
@@ -46,7 +46,7 @@ api.interceptors.response.use(
 export function setAuthToken(token) {
   if (token) {
     api.defaults.headers.common.Authorization = `Bearer ${token}`;
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
   } else {
     delete api.defaults.headers.common.Authorization;
     localStorage.removeItem("token");

@@ -117,9 +117,9 @@ const Home = () => {
   }, [restaurantId]);
 
   const handleContinue = () => {
-    localStorage.setItem("businessType", businessType);
-    localStorage.setItem("businessPlan", businessPlan);
-    localStorage.setItem("isVerifiedUser", isVerified);
+    sessionStorage.setItem("businessType", businessType);
+    sessionStorage.setItem("businessPlan", businessPlan);
+    sessionStorage.setItem("isVerifiedUser", isVerified);
 
     // 🔹 Convert 91-9586023883 → +919586023883
     let fullPhoneNumber = "";
@@ -128,7 +128,7 @@ const Home = () => {
       const [country, phone] = guestNumber.split("-");
       fullPhoneNumber = `+${country}${phone}`;
       console.log("Guest Full Number", fullPhoneNumber);
-      localStorage.setItem("visitorPhone", fullPhoneNumber);
+      sessionStorage.setItem("visitorPhone", fullPhoneNumber);
     }
 
     if (isVerified) {

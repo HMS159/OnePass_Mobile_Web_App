@@ -18,8 +18,8 @@ const IdVerification = () => {
       setIsLoading(true);
 
       // ✅ Get phone data from localStorage
-      const phoneNumber = localStorage.getItem("phoneNumber");
-      const countryCode = localStorage.getItem("phoneCountryCode"); // make sure you store this during login
+      const phoneNumber = sessionStorage.getItem("phoneNumber");
+      const countryCode = sessionStorage.getItem("phoneCountryCode"); // make sure you store this during login
 
       if (!phoneNumber || !countryCode) {
         alert("Phone details not found. Please login again.");
@@ -49,10 +49,10 @@ const IdVerification = () => {
       };
 
       // ✅ Store in ONE localStorage key
-      localStorage.setItem("digilockerData", JSON.stringify(digilockerData));
+      sessionStorage.setItem("digilockerData", JSON.stringify(digilockerData));
 
       // Optional: store selectedId if needed
-      localStorage.setItem("selectedId", selectedId);
+      sessionStorage.setItem("selectedId", selectedId);
 
       // ✅ Navigate
       navigate("/consent", {

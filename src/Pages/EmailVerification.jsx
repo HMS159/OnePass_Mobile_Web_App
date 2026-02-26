@@ -13,9 +13,9 @@ const EmailVerification = () => {
   useEffect(() => {
     if (location.state?.email) {
       setEmail(location.state.email);
-      localStorage.setItem("userEmail", location.state.email);
+      sessionStorage.setItem("userEmail", location.state.email);
     } else {
-      const storedEmail = localStorage.getItem("userEmail");
+      const storedEmail = sessionStorage.getItem("userEmail");
       if (storedEmail) {
         setEmail(storedEmail);
       }

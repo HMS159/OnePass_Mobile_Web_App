@@ -28,9 +28,9 @@ const Consent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const type = localStorage.getItem("businessType") || "Hospitality";
-    const plan = localStorage.getItem("businessPlan") || "Starter";
-    const verified = localStorage.getItem("isVerifiedUser") === "true";
+    const type = sessionStorage.getItem("businessType") || "Hospitality";
+    const plan = sessionStorage.getItem("businessPlan") || "Starter";
+    const verified = sessionStorage.getItem("isVerifiedUser") === "true";
 
     setBusinessType(type);
     setBusinessPlan(plan);

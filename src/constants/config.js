@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   DIGILOCKER_CREATE_URL: "/digilocker/create-url",
   AADHAAR_DATA: "/digilocker/aadhaar",
   PERSIST_AADHAAR_UPDATE: "/guest/persist/aadhaar/update",
+  PERSIST_IMAGE: "/guest/persist/aadhar/image",
 };
 
 export default ENDPOINTS;

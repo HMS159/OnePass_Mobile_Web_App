@@ -13,9 +13,9 @@ const CheckinSuccess = () => {
 
   // useEffect(() => {
   //   // Get values from localStorage (adjust if coming from context)
-  //   const type = localStorage.getItem("businessType");
-  //   const plan = localStorage.getItem("businessPlan");
-  //   const verified = localStorage.getItem("isVerifiedUser");
+  //   const type = sessionStorage.getItem("businessType");
+  //   const plan = sessionStorage.getItem("businessPlan");
+  //   const verified = sessionStorage.getItem("isVerifiedUser");
 
   //   setBusinessType(type);
   //   setBusinessPlan(plan);
@@ -23,17 +23,17 @@ const CheckinSuccess = () => {
   // }, []);
 
   // useEffect(() => {
-  //   const type = localStorage.getItem("businessType");
-  //   const plan = localStorage.getItem("businessPlan");
-  //   const verified = localStorage.getItem("isVerifiedUser");
+  //   const type = sessionStorage.getItem("businessType");
+  //   const plan = sessionStorage.getItem("businessPlan");
+  //   const verified = sessionStorage.getItem("isVerifiedUser");
 
   //   setBusinessType(type);
   //   setBusinessPlan(plan);
   //   setIsUserVerified(verified === "true");
 
-  //   if (localStorage.getItem("aadhaarPersisted") === "true") return;
+  //   if (sessionStorage.getItem("aadhaarPersisted") === "true") return;
 
-  //   const digilockerRaw = localStorage.getItem("digilockerResponse");
+  //   const digilockerRaw = sessionStorage.getItem("digilockerResponse");
 
   //   let verificationId = null;
   //   let referenceId = null;
@@ -53,9 +53,9 @@ const CheckinSuccess = () => {
   //     }
   //   }
 
-  //   const phoneCode = localStorage.getItem("phoneCountryCode") || "+91";
+  //   const phoneCode = sessionStorage.getItem("phoneCountryCode") || "+91";
 
-  //   const phoneNumber = localStorage.getItem("phoneNumber");
+  //   const phoneNumber = sessionStorage.getItem("phoneNumber");
 
   //   const fetchAndPersist = async () => {
   //     try {
@@ -116,9 +116,9 @@ const CheckinSuccess = () => {
 
   //       console.log("✅ Aadhaar Persisted Successfully");
 
-  //       localStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
+  //       sessionStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
 
-  //       localStorage.setItem("aadhaarPersisted", "true");
+  //       sessionStorage.setItem("aadhaarPersisted", "true");
   //     } catch (error) {
   //       console.error(
   //         "❌ Aadhaar flow error:",
@@ -133,17 +133,17 @@ const CheckinSuccess = () => {
   // -- 2nd UseEffect Updates --
 
   // useEffect(() => {
-  //   const type = localStorage.getItem("businessType");
-  //   const plan = localStorage.getItem("businessPlan");
-  //   const verified = localStorage.getItem("isVerifiedUser");
+  //   const type = sessionStorage.getItem("businessType");
+  //   const plan = sessionStorage.getItem("businessPlan");
+  //   const verified = sessionStorage.getItem("isVerifiedUser");
 
   //   setBusinessType(type);
   //   setBusinessPlan(plan);
   //   setIsUserVerified(verified === "true");
 
-  //   if (localStorage.getItem("aadhaarPersisted") === "true") return;
+  //   if (sessionStorage.getItem("aadhaarPersisted") === "true") return;
 
-  //   const digilockerRaw = localStorage.getItem("digilockerResponse");
+  //   const digilockerRaw = sessionStorage.getItem("digilockerResponse");
 
   //   let verificationId = null;
   //   let referenceId = null;
@@ -163,8 +163,8 @@ const CheckinSuccess = () => {
   //     }
   //   }
 
-  //   const phoneCode = localStorage.getItem("phoneCountryCode") || "+91";
-  //   const phoneNumber = localStorage.getItem("phoneNumber");
+  //   const phoneCode = sessionStorage.getItem("phoneCountryCode") || "+91";
+  //   const phoneNumber = sessionStorage.getItem("phoneNumber");
 
   //   const base64ToFile = (base64String, fileName) => {
   //     try {
@@ -273,8 +273,8 @@ const CheckinSuccess = () => {
   //         console.warn("Image persist skipped:", e);
   //       }
 
-  //       localStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
-  //       localStorage.setItem("aadhaarPersisted", "true");
+  //       sessionStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
+  //       sessionStorage.setItem("aadhaarPersisted", "true");
   //     } catch (error) {
   //       console.error(
   //         "❌ Aadhaar flow error:",
@@ -289,9 +289,9 @@ const CheckinSuccess = () => {
   // -- 3rd UseEffect Updates --
 
   useEffect(() => {
-    const type = localStorage.getItem("businessType");
-    const plan = localStorage.getItem("businessPlan");
-    const verified = localStorage.getItem("isVerifiedUser");
+    const type = sessionStorage.getItem("businessType");
+    const plan = sessionStorage.getItem("businessPlan");
+    const verified = sessionStorage.getItem("isVerifiedUser");
 
     setBusinessType(type);
     setBusinessPlan(plan);
@@ -307,9 +307,9 @@ const CheckinSuccess = () => {
       return; // ⛔ Stop everything here
     }
 
-    if (localStorage.getItem("aadhaarPersisted") === "true") return;
+    if (sessionStorage.getItem("aadhaarPersisted") === "true") return;
 
-    const digilockerRaw = localStorage.getItem("digilockerResponse");
+    const digilockerRaw = sessionStorage.getItem("digilockerResponse");
 
     let verificationId = null;
     let referenceId = null;
@@ -329,8 +329,8 @@ const CheckinSuccess = () => {
       }
     }
 
-    const phoneCode = localStorage.getItem("phoneCountryCode") || "+91";
-    const phoneNumber = localStorage.getItem("phoneNumber");
+    const phoneCode = sessionStorage.getItem("phoneCountryCode") || "+91";
+    const phoneNumber = sessionStorage.getItem("phoneNumber");
 
     const base64ToFile = (base64String, fileName) => {
       try {
@@ -410,8 +410,8 @@ const CheckinSuccess = () => {
           }
         }
 
-        localStorage.setItem("aadhaarPersisted", "true");
-        localStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
+        sessionStorage.setItem("aadhaarPersisted", "true");
+        sessionStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
       } catch (error) {
         console.error(
           "❌ Aadhaar flow error:",
