@@ -29,7 +29,9 @@ const CheckinSuccess = () => {
 
     setBusinessType(type);
     setBusinessPlan(plan);
-    setIsUserVerified(verified);
+    setIsUserVerified(verified === "true");
+
+    console.log(isUserVerified);
 
     // ✅ 🔥 ELIGIBILITY CHECK (ADD THIS BLOCK)
     const isEligibleType = type === "Corporate" || type === "Hospitality";
@@ -166,7 +168,9 @@ const CheckinSuccess = () => {
       businessPlan === "SMB" ||
       businessPlan === "Enterprise";
 
-    if (isCorporateOrHospitality && isSmbOrEnterprise && !isUserVerified) {
+    console.log(isUserVerified);
+
+    if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
       navigate("/history");
     } else {
       navigate("/profile");
