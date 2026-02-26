@@ -29,7 +29,7 @@ const CheckinSuccess = () => {
 
     setBusinessType(type);
     setBusinessPlan(plan);
-    setIsUserVerified(verified === "true");
+    setIsUserVerified(verified);
 
     // ✅ 🔥 ELIGIBILITY CHECK (ADD THIS BLOCK)
     const isEligibleType = type === "Corporate" || type === "Hospitality";
