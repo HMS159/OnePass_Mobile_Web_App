@@ -34,7 +34,6 @@ const VerificationSelection = () => {
   const isSMB = businessPlan?.toLowerCase() === "smb";
   const isEnterprise = businessPlan?.toLowerCase() === "enterprise";
 
-  const showCorporateView = isEligibleType && (isSMB || isEnterprise);
   const shouldDirectlyShowCode = isEligibleType && isSMB && isVerifiedUser;
 
   useEffect(() => {
@@ -43,72 +42,76 @@ const VerificationSelection = () => {
     }
   }, [shouldDirectlyShowCode, navigate]);
 
-  const handleContinue = () => {
-    if (isSMB) {
-      navigate("/verification-code");
-    } else if (isEnterprise) {
-      navigate("/face-match");
-    }
-  };
-
-  // const handleContinue = async () => {
-  //   try {
-  //     if (selectedId === "aadhaar") {
-  //       const digilockerData = JSON.parse(
-  //         localStorage.getItem("digilockerData") || "{}",
-  //       );
-  //       console.log("digilockerData", digilockerData);
-
-  //       const verificationId = digilockerData?.verificationId;
-  //       const status = digilockerData?.digilockerResponse?.status; // 👈 get status properly
-
-  //       // 🔹 Decide userFlow based on status
-  //       let userFlow = "signin"; // default fallback
-
-  //       if (status === "ACCOUNT_EXISTS") {
-  //         userFlow = "signin";
-  //       } else if (status === "ACCOUNT_NOT_FOUND") {
-  //         userFlow = "signup";
-  //       }
-
-  //       if (!verificationId) {
-  //         console.error("Missing verificationId in digilockerData");
-  //         return;
-  //       }
-
-  //       let redirectPath = "/verification-code";
-
-  //       if (isEnterprise) {
-  //         redirectPath = "/face-match";
-  //       }
-
-  //       const redirectUrl = "kabdkjad adskjabsdkasjdkj";
-
-  //       const response = await createDigilockerUrl(
-  //         verificationId,
-  //         ["AADHAAR"],
-  //         redirectUrl,
-  //         userFlow,
-  //       );
-
-  //       const digilockerUrl = response?.url || response?.data?.url;
-
-  //       if (digilockerUrl) {
-  //         window.location.href = digilockerUrl;
-  //         return; // stop further navigation
-  //       }
-  //     }
-
-  //     // 🔹 Fallback navigation (non-Aadhaar flow)
-  //     if (isSMB) {
-  //       navigate("/verification-code");
-  //     } else if (isEnterprise) {
-  //       navigate("/face-match");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in verification flow:", error.message);
+  // const handleContinue = () => {
+  //   if (isSMB) {
+  //     navigate("/verification-code");
+  //   } else if (isEnterprise) {
+  //     navigate("/face-match");
   //   }
   // };
+
+  const handleContinue = async () => {
+    try {
+      if (selectedId === "aadhaar") {
+        const digilockerData = JSON.parse(
+          localStorage.getItem("digilockerData") || "{}",
+        );
+        console.log("digilockerData", digilockerData);
+
+        const verificationId = digilockerData?.verificationId;
+        const status = digilockerData?.digilockerResponse?.status; // 👈 get status properly
+
+        // 🔹 Decide userFlow based on status
+        let userFlow = "signin"; // default fallback
+
+        if (status === "ACCOUNT_EXISTS") {
+          userFlow = "signin";
+        } else if (status === "ACCOUNT_NOT_FOUND") {
+          userFlow = "signup";
+        }
+
+        if (!verificationId) {
+          console.error("Missing verificationId in digilockerData");
+          return;
+        }
+
+        let redirectPath = "/verification-code";
+
+        if (isEnterprise) {
+          redirectPath = "/face-match";
+        }
+
+        const redirectUrl = "";
+
+        const response = await createDigilockerUrl(
+          verificationId,
+          ["AADHAAR"],
+          redirectUrl,
+          userFlow,
+        );
+
+        console.log(response);
+
+        localStorage.setItem("digilockerResponse", JSON.stringify(response));
+
+        const digilockerUrl = response?.url || response?.data?.url;
+
+        if (digilockerUrl) {
+          window.location.href = digilockerUrl;
+          return; // stop further navigation
+        }
+      }
+
+      // 🔹 Fallback navigation (non-Aadhaar flow)
+      if (isSMB) {
+        navigate("/verification-code");
+      } else if (isEnterprise) {
+        navigate("/face-match");
+      }
+    } catch (error) {
+      console.error("Error in verification flow:", error.message);
+    }
+  };
 
   const getIDContent = () => {
     switch (selectedId) {

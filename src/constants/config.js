@@ -5,6 +5,8 @@ export const ENDPOINTS = {
   UPDATE_EMAIL: "/guest/persist/email/update",
   DIGILOCKER_VERIFY_ACCOUNT: "/digilocker/verify-account",
   DIGILOCKER_CREATE_URL: "/digilocker/create-url",
+  AADHAAR_DATA: "/digilocker/aadhaar",
+  PERSIST_AADHAAR_UPDATE: "/guest/persist/aadhaar/update",
 };
 
 export default ENDPOINTS;
