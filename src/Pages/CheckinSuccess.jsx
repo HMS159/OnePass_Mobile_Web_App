@@ -166,7 +166,7 @@ const CheckinSuccess = () => {
       businessPlan === "SMB" ||
       businessPlan === "Enterprise";
 
-    if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
+    if (isCorporateOrHospitality && isSmbOrEnterprise && !isUserVerified) {
       navigate("/history");
     } else {
       navigate("/profile");
