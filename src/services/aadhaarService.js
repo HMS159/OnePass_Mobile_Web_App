@@ -184,8 +184,70 @@ export const persistAadhaarImage = async (
   }
 };
 
+/**
+ * Fetch Aadhaar image using phone details
+ * GET: /HotelGuestRead/aadhar/image
+ *
+ * @param {string} phoneCountryCode - e.g. "91" or "+91"
+ * @param {string} phoneNumber - e.g. "9876543210"
+ * @returns {Promise<Object|null>}
+ */
+export const getAadhaarImageByPhone = async (phoneCountryCode, phoneNumber) => {
+  try {
+    if (!phoneCountryCode || !phoneNumber) {
+      throw new Error("Phone details are required");
+    }
+
+    // 🔥 Normalize country code (remove + if present)
+    const normalizedCode = phoneCountryCode.replace("+", "");
+
+    const params = {
+      phoneCountryCode: normalizedCode,
+      phoneno: phoneNumber,
+    };
+
+    console.log("🔍 Fetching Aadhaar image...");
+    console.log("📤 Endpoint:", ENDPOINTS.AADHAAR_IMAGE_BY_PHONE);
+    console.log("📦 Params:", params);
+
+    const response = await api.get(ENDPOINTS.AADHAAR_IMAGE_BY_PHONE, {
+      params,
+    });
+
+    console.log("✅ Aadhaar image response:", response.data);
+
+    return response.data || null;
+  } catch (error) {
+    console.error("❌ Error fetching Aadhaar image:", {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+
+    if (error.response?.status === 404) {
+      console.warn("⚠️ Aadhaar image not found (404)");
+      return null;
+    }
+
+    if (error.response?.status === 400) {
+      throw new Error(
+        error.response?.data?.message || "Invalid phone details (400)",
+      );
+    }
+
+    if (error.response?.status === 401) {
+      throw new Error("Authentication failed (401)");
+    }
+
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch Aadhaar image",
+    );
+  }
+};
+
 export default {
   getAadhaarData,
   persistAadhaarUpdate,
   persistAadhaarImage,
+  getAadhaarImageByPhone,
 };

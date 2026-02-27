@@ -1,20 +1,114 @@
 import React, { useState, useMemo } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Edit2, CheckCircle, Mail, Phone } from "lucide-react";
 import MobileHeader from "../Components/MobileHeader";
+import { getAadhaarImageByPhone } from "../services/aadhaarService"; // ✅ import service
+import { getGuestByPhone } from "../services/guestService";
+import UserIcon from "../assets/images/UserIcon.png";
 
 const MyProfile = () => {
   const navigate = useNavigate();
 
+  const [profileImage, setProfileImage] = useState(UserIcon);
+
   const [form, setForm] = useState({
-    phone: "+1 (555) 012-3456",
-    email: "a.harrison@techcorp.com",
-    firstName: "Alex",
-    surname: "Harrison",
-    organization: "TechCorp Solutions",
+    phone: "",
+    email: "",
+    firstName: "",
+    surname: "",
+    organization: "",
     laptopSerial: "",
     mobileIMEI: "",
   });
+
+  useEffect(() => {
+    const phoneCountryCodeRaw = sessionStorage.getItem("phoneCountryCode");
+    const phoneNumberRaw = sessionStorage.getItem("phoneNumber");
+    const sessionEmail = sessionStorage.getItem("userEmail");
+    const businessType = sessionStorage.getItem("businessType");
+    const businessPlan = sessionStorage.getItem("businessPlan");
+
+    if (!phoneCountryCodeRaw || !phoneNumberRaw) return;
+
+    let countryCode = phoneCountryCodeRaw;
+    let phoneNumber = phoneNumberRaw;
+
+    // Handle format like: 91-9586023883
+    if (phoneNumberRaw.includes("-")) {
+      const parts = phoneNumberRaw.split("-");
+      countryCode = parts[0];
+      phoneNumber = parts[1];
+    }
+
+    const normalizedType = businessType?.toLowerCase();
+    const normalizedPlan = businessPlan?.toLowerCase();
+
+    const isEligibleType = ["corporate", "hospitality"].includes(
+      normalizedType,
+    );
+    const isEligiblePlan = ["smb", "enterprise"].includes(normalizedPlan);
+
+    /* 🔹 ALWAYS set phone + email from session first */
+    setForm((prev) => ({
+      ...prev,
+      phone: `+${countryCode} ${phoneNumber}`,
+      email: sessionEmail || prev.email,
+    }));
+
+    /* ❌ If not eligible → STOP here */
+    if (!isEligibleType || !isEligiblePlan) {
+      console.log("Skipping profile APIs (Not eligible plan/type)");
+      return;
+    }
+
+    /* ✅ Eligible → Call APIs */
+    const fetchProfileData = async () => {
+      try {
+        /* 1️⃣ Fetch Guest */
+        const guestData = await getGuestByPhone(countryCode, phoneNumber);
+
+        if (guestData) {
+          let firstName = "";
+          let surname = "";
+
+          if (guestData?.fullName) {
+            const nameParts = guestData.fullName.trim().split(/\s+/);
+
+            firstName = nameParts[0] || "";
+            surname = nameParts.slice(1).join(" ") || "";
+          }
+
+          setForm((prev) => ({
+            ...prev,
+            email: guestData?.email || prev.email,
+            firstName: firstName || prev.firstName,
+            surname: surname || prev.surname,
+            organization: guestData?.organization || "",
+          }));
+        }
+
+        /* 2️⃣ Fetch Aadhaar Image */
+        const imageResponse = await getAadhaarImageByPhone(
+          countryCode,
+          phoneNumber,
+        );
+
+        const base64Image =
+          imageResponse?.photo_link ||
+          imageResponse?.image ||
+          imageResponse?.profile_image;
+
+        if (base64Image) {
+          setProfileImage(`data:image/jpeg;base64,${base64Image}`);
+        }
+      } catch (error) {
+        console.error("Profile fetch error:", error.message);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   const totalFields = 7;
 
@@ -32,13 +126,17 @@ const MyProfile = () => {
     }));
   };
 
-  const requiredFields = [
-    form.phone,
-    form.email,
-    form.firstName,
-    form.surname,
-    form.organization,
-  ];
+  const businessType = sessionStorage.getItem("businessType")?.toLowerCase();
+  const businessPlan = sessionStorage.getItem("businessPlan")?.toLowerCase();
+
+  /* 🔹 Corporate + Starter → Only phone & email required */
+  const isCorporateStarter =
+    businessType === "corporate" && businessPlan === "starter";
+
+  /* 🔹 Define required fields dynamically */
+  const requiredFields = isCorporateStarter
+    ? [form.phone, form.email]
+    : [form.phone, form.email, form.firstName, form.surname];
 
   const isContinueEnabled = requiredFields.every(
     (field) => field && field.trim() !== "",
@@ -56,7 +154,7 @@ const MyProfile = () => {
           <div className="flex flex-col items-center">
             <div className="relative">
               <img
-                src="https://randomuser.me/api/portraits/men/32.jpg"
+                src={profileImage}
                 alt="profile"
                 className="w-24 h-24 rounded-full object-cover"
               />

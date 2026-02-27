@@ -8,6 +8,7 @@ export const ENDPOINTS = {
   AADHAAR_DATA: "/digilocker/aadhaar",
   PERSIST_AADHAAR_UPDATE: "/guest/persist/aadhaar/update",
   PERSIST_IMAGE: "/guest/persist/aadhar/image",
+  AADHAAR_IMAGE_BY_PHONE: "/HotelGuestRead/aadhar/image",
 };
 
 export default ENDPOINTS;
