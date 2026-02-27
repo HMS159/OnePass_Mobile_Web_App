@@ -375,6 +375,8 @@ const Home = () => {
     if (guestNumber) {
       const [country, phone] = guestNumber.split("-");
       fullPhoneNumber = `+${country}${phone}`;
+      sessionStorage.setItem("visitorCountryCode", country);
+      sessionStorage.setItem("visitorPhoneNumber", phone);
       sessionStorage.setItem("visitorPhone", fullPhoneNumber);
     }
 

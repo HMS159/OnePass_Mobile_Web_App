@@ -52,7 +52,8 @@ const VerificationSelection = () => {
 
   const handleContinue = async () => {
     try {
-      if (selectedId === "aadhaar") {
+      // if (selectedId === "aadhaar")
+      if (["aadhaar", "passport", "voter", "dl"].includes(selectedId)) {
         const digilockerData = JSON.parse(
           sessionStorage.getItem("digilockerData") || "{}",
         );
@@ -86,6 +87,7 @@ const VerificationSelection = () => {
         const response = await createDigilockerUrl(
           verificationId,
           ["AADHAAR"],
+          // ["AADHAAR", "PAN", "DRIVING_LICENSE"],
           redirectUrl,
           userFlow,
         );

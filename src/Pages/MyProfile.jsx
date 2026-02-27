@@ -25,20 +25,49 @@ const MyProfile = () => {
   useEffect(() => {
     const phoneCountryCodeRaw = sessionStorage.getItem("phoneCountryCode");
     const phoneNumberRaw = sessionStorage.getItem("phoneNumber");
+    const visitorPhoneRaw = sessionStorage.getItem("visitorPhone");
     const sessionEmail = sessionStorage.getItem("userEmail");
     const businessType = sessionStorage.getItem("businessType");
     const businessPlan = sessionStorage.getItem("businessPlan");
 
-    if (!phoneCountryCodeRaw || !phoneNumberRaw) return;
+    let countryCode = "";
+    let phoneNumber = "";
 
-    let countryCode = phoneCountryCodeRaw;
-    let phoneNumber = phoneNumberRaw;
+    /* ---------------------------------------------
+     STEP 1: Determine phone source
+  --------------------------------------------- */
 
-    // Handle format like: 91-9586023883
-    if (phoneNumberRaw.includes("-")) {
-      const parts = phoneNumberRaw.split("-");
-      countryCode = parts[0];
-      phoneNumber = parts[1];
+    // ✅ Case 1: Normal flow (country + number available)
+    if (phoneCountryCodeRaw && phoneNumberRaw) {
+      countryCode = phoneCountryCodeRaw;
+      phoneNumber = phoneNumberRaw;
+
+      // Handle format like: 91-9586023883
+      if (phoneNumberRaw.includes("-")) {
+        const parts = phoneNumberRaw.split("-");
+        countryCode = parts[0];
+        phoneNumber = parts[1];
+      }
+    }
+
+    // ✅ Case 2: Fallback → visitorPhone (+919586023883)
+    else if (visitorPhoneRaw) {
+      const cleanPhone = visitorPhoneRaw.replace(/\s+/g, "");
+
+      if (cleanPhone.startsWith("+")) {
+        // Remove "+"
+        const withoutPlus = cleanPhone.substring(1);
+
+        // Assuming India country code (2 digits like 91)
+        countryCode = withoutPlus.substring(0, 2);
+        phoneNumber = withoutPlus.substring(2);
+      }
+    }
+
+    // ❌ No phone found → stop
+    if (!countryCode || !phoneNumber) {
+      console.log("No phone available in session");
+      return;
     }
 
     const normalizedType = businessType?.toLowerCase();
@@ -47,22 +76,32 @@ const MyProfile = () => {
     const isEligibleType = ["corporate", "hospitality"].includes(
       normalizedType,
     );
+
     const isEligiblePlan = ["smb", "enterprise"].includes(normalizedPlan);
 
-    /* 🔹 ALWAYS set phone + email from session first */
+    /* ---------------------------------------------
+     STEP 2: Always Set Phone + Email
+  --------------------------------------------- */
+
     setForm((prev) => ({
       ...prev,
       phone: `+${countryCode} ${phoneNumber}`,
       email: sessionEmail || prev.email,
     }));
 
-    /* ❌ If not eligible → STOP here */
+    /* ---------------------------------------------
+     STEP 3: Stop if not eligible
+  --------------------------------------------- */
+
     if (!isEligibleType || !isEligiblePlan) {
       console.log("Skipping profile APIs (Not eligible plan/type)");
       return;
     }
 
-    /* ✅ Eligible → Call APIs */
+    /* ---------------------------------------------
+     STEP 4: Call APIs
+  --------------------------------------------- */
+
     const fetchProfileData = async () => {
       try {
         /* 1️⃣ Fetch Guest */
@@ -74,9 +113,8 @@ const MyProfile = () => {
 
           if (guestData?.fullName) {
             const nameParts = guestData.fullName.trim().split(/\s+/);
-
             firstName = nameParts[0] || "";
-            surname = nameParts.slice(1).join(" ") || "";
+            surname = nameParts.slice(2).join(" ") || "";
           }
 
           setForm((prev) => ({
@@ -135,7 +173,8 @@ const MyProfile = () => {
 
   /* 🔹 Define required fields dynamically */
   const requiredFields = isCorporateStarter
-    ? [form.phone, form.email]
+    ? // ? [form.phone, form.email]
+      [form.phone]
     : [form.phone, form.email, form.firstName, form.surname];
 
   const isContinueEnabled = requiredFields.every(
