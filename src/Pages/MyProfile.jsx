@@ -37,34 +37,25 @@ const MyProfile = () => {
      STEP 1: Determine phone source
   --------------------------------------------- */
 
-    // ✅ Case 1: Normal flow (country + number available)
     if (phoneCountryCodeRaw && phoneNumberRaw) {
       countryCode = phoneCountryCodeRaw;
       phoneNumber = phoneNumberRaw;
 
-      // Handle format like: 91-9586023883
       if (phoneNumberRaw.includes("-")) {
         const parts = phoneNumberRaw.split("-");
         countryCode = parts[0];
         phoneNumber = parts[1];
       }
-    }
-
-    // ✅ Case 2: Fallback → visitorPhone (+919586023883)
-    else if (visitorPhoneRaw) {
+    } else if (visitorPhoneRaw) {
       const cleanPhone = visitorPhoneRaw.replace(/\s+/g, "");
 
       if (cleanPhone.startsWith("+")) {
-        // Remove "+"
         const withoutPlus = cleanPhone.substring(1);
-
-        // Assuming India country code (2 digits like 91)
         countryCode = withoutPlus.substring(0, 2);
         phoneNumber = withoutPlus.substring(2);
       }
     }
 
-    // ❌ No phone found → stop
     if (!countryCode || !phoneNumber) {
       console.log("No phone available in session");
       return;
@@ -77,7 +68,8 @@ const MyProfile = () => {
       normalizedType,
     );
 
-    const isEligiblePlan = ["smb", "enterprise"].includes(normalizedPlan);
+    const isStarter = normalizedPlan === "starter";
+    const isFullPlan = ["smb", "enterprise"].includes(normalizedPlan);
 
     /* ---------------------------------------------
      STEP 2: Always Set Phone + Email
@@ -90,21 +82,39 @@ const MyProfile = () => {
     }));
 
     /* ---------------------------------------------
-     STEP 3: Stop if not eligible
+     STEP 3: Stop if not eligible type
   --------------------------------------------- */
 
-    if (!isEligibleType || !isEligiblePlan) {
-      console.log("Skipping profile APIs (Not eligible plan/type)");
+    if (!isEligibleType) {
+      console.log("Skipping profile APIs (Not eligible type)");
       return;
     }
 
     /* ---------------------------------------------
-     STEP 4: Call APIs
+     STEP 4: Starter Plan → Only Fetch Email
   --------------------------------------------- */
 
-    const fetchProfileData = async () => {
+    const fetchStarterEmail = async () => {
       try {
-        /* 1️⃣ Fetch Guest */
+        const guestData = await getGuestByPhone(countryCode, phoneNumber);
+
+        if (guestData?.email) {
+          setForm((prev) => ({
+            ...prev,
+            email: guestData.email,
+          }));
+        }
+      } catch (error) {
+        console.error("Starter email fetch error:", error.message);
+      }
+    };
+
+    /* ---------------------------------------------
+     STEP 5: SMB / Enterprise → Full Profile Fetch
+  --------------------------------------------- */
+
+    const fetchFullProfileData = async () => {
+      try {
         const guestData = await getGuestByPhone(countryCode, phoneNumber);
 
         if (guestData) {
@@ -114,7 +124,7 @@ const MyProfile = () => {
           if (guestData?.fullName) {
             const nameParts = guestData.fullName.trim().split(/\s+/);
             firstName = nameParts[0] || "";
-            surname = nameParts.slice(2).join(" ") || "";
+            surname = nameParts.slice(1).join(" ") || "";
           }
 
           setForm((prev) => ({
@@ -126,7 +136,7 @@ const MyProfile = () => {
           }));
         }
 
-        /* 2️⃣ Fetch Aadhaar Image */
+        // Fetch Aadhaar image only for SMB / Enterprise
         const imageResponse = await getAadhaarImageByPhone(
           countryCode,
           phoneNumber,
@@ -141,11 +151,19 @@ const MyProfile = () => {
           setProfileImage(`data:image/jpeg;base64,${base64Image}`);
         }
       } catch (error) {
-        console.error("Profile fetch error:", error.message);
+        console.error("Full profile fetch error:", error.message);
       }
     };
 
-    fetchProfileData();
+    /* ---------------------------------------------
+     STEP 6: Execute Based on Plan
+  --------------------------------------------- */
+
+    if (isStarter) {
+      fetchStarterEmail(); // 🔹 Only email
+    } else if (isFullPlan) {
+      fetchFullProfileData(); // 🔹 Full data
+    }
   }, []);
 
   const totalFields = 7;
@@ -173,8 +191,7 @@ const MyProfile = () => {
 
   /* 🔹 Define required fields dynamically */
   const requiredFields = isCorporateStarter
-    ? // ? [form.phone, form.email]
-      [form.phone]
+    ? [form.phone, form.email]
     : [form.phone, form.email, form.firstName, form.surname];
 
   const isContinueEnabled = requiredFields.every(
