@@ -179,17 +179,17 @@ const FaceMatch = () => {
   }, []);
 
   return (
-    <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
+    <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-hidden">
       <MobileHeader />
+      <h1 className="text-3xl font-bold text-[#1b3631] mb-4">
+        Verify your identity
+      </h1>
 
-      <div className="flex-1">
-        <h1 className="text-3xl font-bold text-[#1b3631] mb-4">
-          Verify your identity
-        </h1>
-
+      <div className="flex-1 overflow-y-auto pr-1">
         <p className="text-gray-500 text-sm mb-8 leading-relaxed">
           To complete your check-in, your photo will be taken at the reception
-          desk.
+          desk. This helps the host organization confirm that you are present in
+          person and ensures secure access for everyone.
         </p>
 
         {/* Capture Status */}
@@ -245,12 +245,48 @@ const FaceMatch = () => {
             />
           </div>
         </div>
+        {/* Instructions */}
+        <div className="mb-8">
+          <h3 className="text-xs font-bold tracking-wider text-gray-500 mb-4">
+            INSTRUCTIONS
+          </h3>
+
+          <div className="space-y-4 text-sm text-gray-600">
+            <div className="flex items-start gap-3">
+              <Scan size={30} className="mt-0.5 text-gray-400" />
+              <p>
+                Please stand facing the reception camera. Make sure your face is
+                clearly visible.
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <EyeOff size={30} className="mt-0.5 text-gray-400" />
+              <p>
+                Remove masks or eyewear if possible. This will only take a
+                moment.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy Info */}
+        <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-500 leading-relaxed mb-6">
+          <div className="flex items-start gap-2">
+            <ShieldAlert size={16} className="mt-0.5 text-gray-400" />
+            <p>
+              Your image is used only to verify your identity for this visit. It
+              is not used for marketing or profiling. Your data is processed
+              securely in line with India’s DPDP Act.
+            </p>
+          </div>
+        </div>
       </div>
 
       <button
         disabled={status !== "success"}
         onClick={() => navigate("/success")}
-        className={`w-full h-14 rounded-xl font-bold transition flex items-center justify-center gap-2
+        className={`w-full h-14 rounded-xl shrink-0 font-bold transition flex items-center justify-center gap-2
           ${
             status === "success"
               ? "bg-[#1b3631] text-white"
