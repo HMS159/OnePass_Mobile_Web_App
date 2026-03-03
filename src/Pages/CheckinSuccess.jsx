@@ -3,6 +3,7 @@ import { Check, X, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CHECKIN_SUCCESS_UI } from "../constants/ui";
 import aadhaarService from "../services/aadhaarService";
+import { persistGuestRegister } from "../services/guestService";
 
 const CheckinSuccess = () => {
   const navigate = useNavigate();
@@ -159,35 +160,28 @@ const CheckinSuccess = () => {
     fetchAndPersist();
   }, []);
 
-  // const handleDoneNavigation = () => {
-  //   const isCorporateOrHospitality =
-  //     businessType === "Corporate" || businessType === "Hospitality";
-
-  //   const isSmbOrEnterprise =
-  //     businessPlan === "Starter" ||
-  //     businessPlan === "SMB" ||
-  //     businessPlan === "Enterprise";
-
-  //   console.log(isUserVerified);
-
-  //   if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
-  //     navigate("/history");
-  //   } else {
-  //     navigate("/profile");
-  //   }
-  // };
-
-  const handleDoneNavigation = () => {
+  const handleDoneNavigation = async () => {
     const isCorporateOrHospitality =
       businessType === "Corporate" || businessType === "Hospitality";
 
     const isStarterPlan = businessPlan === "Starter";
 
-    // 🔥 Only this case goes to profile
-    if (isCorporateOrHospitality && isStarterPlan) {
-      navigate("/profile");
-    } else {
-      navigate("/history");
+    try {
+      // ✅ Call API only for Corporate/Hospitality + Starter
+      if (isCorporateOrHospitality && isStarterPlan) {
+        const phoneCountryCode =
+          sessionStorage.getItem("phoneCountryCode") || "+91";
+        const phoneNumber = sessionStorage.getItem("phoneNumber");
+
+        await persistGuestRegister(phoneCountryCode, phoneNumber);
+
+        // 🔥 Navigate to profile after successful API call
+        navigate("/profile");
+      } else {
+        navigate("/history");
+      }
+    } catch (error) {
+      console.error("Navigation blocked due to API error:", error);
     }
   };
 
