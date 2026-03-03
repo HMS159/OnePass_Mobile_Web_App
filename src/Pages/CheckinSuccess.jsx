@@ -159,21 +159,35 @@ const CheckinSuccess = () => {
     fetchAndPersist();
   }, []);
 
+  // const handleDoneNavigation = () => {
+  //   const isCorporateOrHospitality =
+  //     businessType === "Corporate" || businessType === "Hospitality";
+
+  //   const isSmbOrEnterprise =
+  //     businessPlan === "Starter" ||
+  //     businessPlan === "SMB" ||
+  //     businessPlan === "Enterprise";
+
+  //   console.log(isUserVerified);
+
+  //   if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
+  //     navigate("/history");
+  //   } else {
+  //     navigate("/profile");
+  //   }
+  // };
+
   const handleDoneNavigation = () => {
     const isCorporateOrHospitality =
       businessType === "Corporate" || businessType === "Hospitality";
 
-    const isSmbOrEnterprise =
-      businessPlan === "Starter" ||
-      businessPlan === "SMB" ||
-      businessPlan === "Enterprise";
+    const isStarterPlan = businessPlan === "Starter";
 
-    console.log(isUserVerified);
-
-    if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
-      navigate("/history");
-    } else {
+    // 🔥 Only this case goes to profile
+    if (isCorporateOrHospitality && isStarterPlan) {
       navigate("/profile");
+    } else {
+      navigate("/history");
     }
   };
 
