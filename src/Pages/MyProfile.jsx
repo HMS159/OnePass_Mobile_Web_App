@@ -459,7 +459,7 @@ const MyProfile = () => {
           if (guestData?.fullName) {
             const nameParts = guestData.fullName.trim().split(/\s+/);
             firstName = nameParts[0] || "";
-            surname = nameParts.slice(1).join(" ") || "";
+            surname = nameParts.slice(2).join(" ") || "";
           }
 
           setForm((prev) => ({
