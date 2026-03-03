@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
 import { verifyDigilockerAccount } from "../services/digilockerService";
+import { Lock } from "lucide-react";
 
 const IdVerification = () => {
   const navigate = useNavigate();
@@ -105,15 +106,16 @@ const IdVerification = () => {
       <button
         disabled={!isValid || isLoading}
         onClick={handleProceed}
-        className={`w-full h-14 rounded-[6px] font-bold transition
-          ${
-            isValid && !isLoading
-              ? "bg-[#1b3631] text-white shadow-lg"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
-          }
-        `}
+        className={`w-full h-14 rounded-[6px] font-bold transition flex items-center justify-center gap-2
+    ${
+      isValid && !isLoading
+        ? "bg-[#1b3631] text-white shadow-lg"
+        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+    }
+  `}
       >
         {isLoading ? "Verifying..." : "Proceed Securely"}
+        {!isLoading && <Lock size={18} />}
       </button>
 
       <p className="text-[10px] text-gray-400 text-center mt-4 uppercase tracking-wider">
