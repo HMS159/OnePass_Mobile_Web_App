@@ -92,7 +92,7 @@ export const CONSENT_UI = {
 
   PRIVACY_LINK: "View privacy notice",
 
-  CONTINUE_BUTTON: "Continue",
+  CONTINUE_BUTTON: "Proceed Securely",
 };
 
 export const VERIFICATION_UI = {
