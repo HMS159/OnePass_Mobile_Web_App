@@ -10,6 +10,7 @@ export const ENDPOINTS = {
   PERSIST_IMAGE: "/guest/persist/aadhar/image",
   AADHAAR_IMAGE_BY_PHONE: "/HotelGuestRead/aadhar/image",
   PERSIST_GUEST_REGISTER: "/guest/persist/register",
+  UPDATE_GUEST_PROFILE: "/guest/persist/profile/update",
 };
 
 export default ENDPOINTS;

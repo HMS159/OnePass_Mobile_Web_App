@@ -84,8 +84,30 @@ export const persistGuestRegister = async (phoneCountryCode, phoneNumber) => {
   }
 };
 
+/**
+ * Update guest profile
+ * @param {string} id
+ * @param {string} name
+ * @param {string} organization
+ * @returns {Promise<Object|null>}
+ */
+export const updateGuestProfile = async (id, name, organization) => {
+  try {
+    const response = await api.put(ENDPOINTS.UPDATE_GUEST_PROFILE, {
+      id,
+      name,
+      organization,
+    });
+
+    return response?.data || null;
+  } catch (error) {
+    console.error("Update Guest Profile Error:", error.message);
+    return null;
+  }
+};
 export default {
   getGuestByPhone,
   updateGuestEmail,
   persistGuestRegister,
+  updateGuestProfile,
 };
