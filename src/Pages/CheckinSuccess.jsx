@@ -3,6 +3,7 @@ import { Check, X, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CHECKIN_SUCCESS_UI } from "../constants/ui";
 import aadhaarService from "../services/aadhaarService";
+import { persistGuestRegister } from "../services/guestService";
 
 const CheckinSuccess = () => {
   const navigate = useNavigate();
@@ -159,21 +160,28 @@ const CheckinSuccess = () => {
     fetchAndPersist();
   }, []);
 
-  const handleDoneNavigation = () => {
+  const handleDoneNavigation = async () => {
     const isCorporateOrHospitality =
       businessType === "Corporate" || businessType === "Hospitality";
 
-    const isSmbOrEnterprise =
-      businessPlan === "Starter" ||
-      businessPlan === "SMB" ||
-      businessPlan === "Enterprise";
+    const isStarterPlan = businessPlan === "Starter";
 
-    console.log(isUserVerified);
+    try {
+      // ✅ Call API only for Corporate/Hospitality + Starter
+      if (isCorporateOrHospitality && isStarterPlan) {
+        const phoneCountryCode =
+          sessionStorage.getItem("phoneCountryCode") || "+91";
+        const phoneNumber = sessionStorage.getItem("phoneNumber");
 
-    if (isCorporateOrHospitality && isSmbOrEnterprise && isUserVerified) {
-      navigate("/history");
-    } else {
-      navigate("/profile");
+        await persistGuestRegister(phoneCountryCode, phoneNumber);
+
+        // 🔥 Navigate to profile after successful API call
+        navigate("/profile");
+      } else {
+        navigate("/history");
+      }
+    } catch (error) {
+      console.error("Navigation blocked due to API error:", error);
     }
   };
 

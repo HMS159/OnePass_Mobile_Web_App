@@ -48,7 +48,44 @@ export const updateGuestEmail = async (
   }
 };
 
+/**
+ * Persist Guest Register
+ * PUT: /api/guest/persist/register
+ *
+ * @param {string} phoneCountryCode
+ * @param {string} phoneNumber
+ * @returns {Promise<Object>}
+ */
+export const persistGuestRegister = async (phoneCountryCode, phoneNumber) => {
+  try {
+    if (!phoneCountryCode || !phoneNumber) {
+      throw new Error("Phone details are required");
+    }
+
+    const payload = {
+      phoneCountryCode,
+      phoneNumber,
+    };
+
+    console.log("📤 Persist Guest Register Payload:", payload);
+    console.log("📡 Endpoint:", ENDPOINTS.PERSIST_GUEST_REGISTER);
+
+    const response = await api.put(ENDPOINTS.PERSIST_GUEST_REGISTER, payload);
+
+    console.log("✅ Guest Register Persisted:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error persisting guest register:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+};
+
 export default {
   getGuestByPhone,
   updateGuestEmail,
+  persistGuestRegister,
 };

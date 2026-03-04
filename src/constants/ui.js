@@ -10,7 +10,7 @@ export const HOME_UI = {
   getDescription: (propertyName, phoneNumber) =>
     `The receptionist has initiated your check-in at ${propertyName} for the number ${phoneNumber}. Please confirm to continue.`,
 
-  CONTINUE_BUTTON: "Continue",
+  CONTINUE_BUTTON: "Confirm",
 
   PRIVACY_TEXT: "By continuing, you agree to our",
   PRIVACY_LINK: "Privacy Policy",
@@ -92,7 +92,7 @@ export const CONSENT_UI = {
 
   PRIVACY_LINK: "View privacy notice",
 
-  CONTINUE_BUTTON: "Continue",
+  CONTINUE_BUTTON: "Proceed Securely",
 };
 
 export const VERIFICATION_UI = {
