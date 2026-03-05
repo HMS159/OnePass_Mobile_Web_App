@@ -288,7 +288,7 @@ const FaceMatch = () => {
       <button
         disabled={status !== "success"}
         onClick={() => navigate("/success")}
-        className={`w-full h-14 rounded-xl shrink-0 font-bold transition flex items-center justify-center gap-2
+        className={`w-full h-14 rounded-[6px] shrink-0  font-bold transition flex items-center justify-center gap-2
           ${
             status === "success"
               ? "bg-[#1b3631] text-white"
