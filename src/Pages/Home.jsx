@@ -165,7 +165,7 @@ const Home = () => {
         />
 
         {tenantLogo && (
-          <div className="w-15 h-15 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden">
+          <div className="w-25 h-25 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden">
             <img
               src={tenantLogo}
               alt={tenantData?.name}
