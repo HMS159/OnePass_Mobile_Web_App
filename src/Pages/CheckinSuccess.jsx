@@ -160,13 +160,48 @@ const CheckinSuccess = () => {
     fetchAndPersist();
   }, []);
 
+  // const handleDoneNavigation = async () => {
+  //   const isCorporateOrHospitality =
+  //     businessType === "Corporate" || businessType === "Hospitality";
+
+  //   const isStarterPlan = businessPlan === "Starter";
+
+  //   try {
+  //     // ✅ Call API only for Corporate/Hospitality + Starter
+  //     if (isCorporateOrHospitality && isStarterPlan) {
+  //       const phoneCountryCode =
+  //         sessionStorage.getItem("phoneCountryCode") || "+91";
+  //       const phoneNumber = sessionStorage.getItem("phoneNumber");
+
+  //       await persistGuestRegister(phoneCountryCode, phoneNumber);
+
+  //       // 🔥 Navigate to profile after successful API call
+  //       navigate("/profile");
+  //     } else {
+  //       navigate("/history");
+  //     }
+  //   } catch (error) {
+  //     console.error("Navigation blocked due to API error:", error);
+  //   }
+  // };
+
   const handleDoneNavigation = async () => {
     const isCorporateOrHospitality =
       businessType === "Corporate" || businessType === "Hospitality";
 
     const isStarterPlan = businessPlan === "Starter";
 
+    const alreadyRegistered =
+      sessionStorage.getItem("guestRegistered") === "true";
+
     try {
+      // 🚫 Stop API if already registered
+      if (alreadyRegistered) {
+        console.log("⚠️ Guest already registered. Skipping API call.");
+        navigate("/history");
+        return;
+      }
+
       // ✅ Call API only for Corporate/Hospitality + Starter
       if (isCorporateOrHospitality && isStarterPlan) {
         const phoneCountryCode =
@@ -175,7 +210,9 @@ const CheckinSuccess = () => {
 
         await persistGuestRegister(phoneCountryCode, phoneNumber);
 
-        // 🔥 Navigate to profile after successful API call
+        // ✅ Mark as registered
+        sessionStorage.setItem("guestRegistered", "true");
+
         navigate("/profile");
       } else {
         navigate("/history");

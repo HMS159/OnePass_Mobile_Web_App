@@ -31,7 +31,15 @@ const Home = () => {
 
         console.log("UserData:", data);
 
-        if (data?.verificationStatus === "verified") {
+        const status = data?.verificationStatus?.toLowerCase();
+
+        const isCorporateStarterRegistered =
+          status === "verified" ||
+          (status === "registered" &&
+            (businessType === "Corporate" || businessType === "Hospitality") &&
+            businessPlan === "Starter");
+
+        if (status === "verified" || isCorporateStarterRegistered) {
           setIsVerified(true);
 
           setVerifiedUser({
@@ -39,6 +47,11 @@ const Home = () => {
             email: data.email,
             phone: `${country} ••••••${phone.slice(-4)}`,
           });
+
+          // 🔹 Set session flag when registered user qualifies
+          if (isCorporateStarterRegistered) {
+            sessionStorage.setItem("guestRegistered", "true");
+          }
         } else {
           setIsVerified(false);
           setVerifiedUser(null);
@@ -51,7 +64,7 @@ const Home = () => {
     };
 
     fetchGuest();
-  }, [guestNumber]);
+  }, [guestNumber, businessType, businessPlan]);
 
   // 🔹 Fetch Property + Tenant
   useEffect(() => {
