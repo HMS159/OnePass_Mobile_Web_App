@@ -74,7 +74,7 @@ const ProgressBar = () => {
   const getConnectorColor = useCallback(
     (index) => {
       if (index < currentStepIndex) {
-        return "bg-green-500"; // active connector
+        return "bg-[#1B3631]"; // active connector
       } else {
         return "bg-gray-300"; // inactive connector
       }
@@ -123,9 +123,9 @@ const ProgressBar = () => {
               {/* ✅ Step Circle */}
               <div className="relative z-10 flex items-center justify-center bg-white rounded-full ring-[3px] ring-white">
                 {index < currentStepIndex ? (
-                  <div className="w-[12px] h-[12px] rounded-full bg-green-500" />
+                  <div className="w-[12px] h-[12px] rounded-full bg-[#1B3631]" />
                 ) : index === currentStepIndex ? (
-                  <div className="w-[12px] h-[12px] rounded-full bg-yellow-400" />
+                  <div className="w-[12px] h-[12px] rounded-full bg-white border-[2px] border-[#1B3631]" />
                 ) : (
                   <div className="w-[12px] h-[12px] rounded-full bg-white border-[2px] border-gray-300" />
                 )}
