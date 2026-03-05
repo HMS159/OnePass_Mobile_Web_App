@@ -10,6 +10,7 @@ import {
   Lock,
 } from "lucide-react";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import { CONSENT_UI } from "../constants/ui";
 import { useNavigate } from "react-router-dom";
 import { createDigilockerUrl } from "../services/digilockerService";
@@ -143,7 +144,7 @@ const Consent = () => {
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
-
+      <ProgressBar />
       <h1
         className={`${
           isCorporate

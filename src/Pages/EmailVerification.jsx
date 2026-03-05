@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import { EMAIL_VERIFICATION_UI } from "../constants/ui";
 
 const EmailVerification = () => {
@@ -79,6 +80,7 @@ const EmailVerification = () => {
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
+      <ProgressBar />
 
       {/* ICON + TEXT */}
       <div className="flex flex-col items-center text-center mt-10">

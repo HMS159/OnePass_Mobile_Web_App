@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import { VERIFICATION_UI } from "../constants/ui";
 import aadhaarService from "../services/aadhaarService"; // ✅ IMPORT SERVICE
 
@@ -198,6 +199,7 @@ const VerificationCodePage = () => {
   return (
     <div className="w-full h-dvh bg-white flex flex-col px-4 py-5">
       <MobileHeader />
+      <ProgressBar />
 
       <h1 className="text-2xl text-brand mb-2 font-bold">
         {VERIFICATION_UI.TITLE}

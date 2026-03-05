@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import { verifyDigilockerAccount } from "../services/digilockerService";
 import { Lock } from "lucide-react";
 
@@ -69,6 +70,7 @@ const IdVerification = () => {
   return (
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
+      <ProgressBar />
 
       <h1 className="text-2xl font-bold text-[#1b3631] mb-2">
         Choose an ID for verification

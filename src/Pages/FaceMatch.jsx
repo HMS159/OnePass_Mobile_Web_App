@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import aadhaarService from "../services/aadhaarService"; // ✅ IMPORT SERVICE
 
 const FaceMatch = () => {
@@ -181,6 +182,7 @@ const FaceMatch = () => {
   return (
     <div className="w-full h-dvh bg-white px-4 py-5 flex flex-col overflow-hidden">
       <MobileHeader />
+      <ProgressBar />
       <h1 className="text-3xl font-bold text-[#1b3631] mb-4">
         Verify your identity
       </h1>

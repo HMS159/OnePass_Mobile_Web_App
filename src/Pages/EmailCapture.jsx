@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MobileHeader from "../Components/MobileHeader";
+import ProgressBar from "../Components/ProgressBar";
 import { EMAIL_CAPTURE_UI } from "../constants/ui";
 import { ShieldCheck } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -90,6 +91,7 @@ const EmailCapture = () => {
   return (
     <div className="w-full h-dvh bg-white shadow-xl px-4 py-5 flex flex-col overflow-y-auto">
       <MobileHeader />
+      <ProgressBar />
 
       <h1 className="mb-3 text-3xl font-bold text-[#1b3631]">
         {EMAIL_CAPTURE_UI.TITLE}
