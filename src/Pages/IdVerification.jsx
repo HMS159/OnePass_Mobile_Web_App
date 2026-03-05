@@ -116,7 +116,7 @@ const IdVerification = () => {
     }
   `}
       >
-        {isLoading ? "Verifying..." : "Proceed Securely"}
+        {isLoading ? "Verifying..." : "Provide Consent"}
         {!isLoading && <Lock size={18} />}
       </button>
 

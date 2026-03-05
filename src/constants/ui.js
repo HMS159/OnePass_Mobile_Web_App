@@ -17,7 +17,7 @@ export const HOME_UI = {
 };
 
 export const EMAIL_CAPTURE_UI = {
-  TITLE: "Enter your email address",
+  TITLE: "Enter your email",
 
   DESCRIPTION:
     "We need your email to send your digital access pass and check-in confirmation.",

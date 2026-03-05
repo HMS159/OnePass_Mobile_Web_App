@@ -108,12 +108,12 @@ const ProgressBar = () => {
           >
             {/* ✅ Step Circle */}
             <div
-              className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold transition-all duration-300 z-10 ${getStepColor(
+              className={`w-7 h-7 rounded-full flex items-center justify-center font-semibold transition-all duration-300 z-10 ${getStepColor(
                 index,
               )} ${index < currentStepIndex ? "text-white" : "text-gray-800"}`}
             >
               {index < currentStepIndex ? (
-                <Check size={18} />
+                <Check size={14} />
               ) : // <span className="text-sm">{step.id}</span>
               null}
             </div>
@@ -121,14 +121,14 @@ const ProgressBar = () => {
             {/* ✅ Dashed Connector (Between circles) */}
             {index < steps.length - 1 && (
               <div
-                className={`absolute top-4.5 left-1/2 w-full h-1 border-t-2 border-dashed transition-all duration-300 ${
+                className={`absolute top-3.5 left-1/2 w-full h-1 border-t-2 border-dashed transition-all duration-300 ${
                   index < currentStepIndex
                     ? "border-green-500"
                     : "border-gray-300"
                 }`}
                 style={{
-                  width: "calc(100% - 18px)",
-                  left: "calc(50% + 4.5px)",
+                  width: "calc(100% - 14px)",
+                  left: "calc(50% + 3.5px)",
                 }}
               />
             )}
