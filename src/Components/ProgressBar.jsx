@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
-
 const ProgressBar = () => {
   const location = useLocation();
   const [businessType, setBusinessType] = useState("");
@@ -72,15 +70,13 @@ const ProgressBar = () => {
     return -1;
   }, [location.pathname, steps]);
 
-  // ✅ Get color for each step with memoization
-  const getStepColor = useCallback(
+  // ✅ Get color for connector
+  const getConnectorColor = useCallback(
     (index) => {
       if (index < currentStepIndex) {
-        return "bg-green-500"; // ✅ Completed steps are green
-      } else if (index === currentStepIndex) {
-        return "bg-yellow-400"; // ✅ Current step is yellow
+        return "bg-green-500"; // active connector
       } else {
-        return "bg-gray-300"; // ✅ Upcoming steps are gray
+        return "bg-gray-300"; // inactive connector
       }
     },
     [currentStepIndex],
@@ -88,54 +84,57 @@ const ProgressBar = () => {
 
   const getTextColor = useCallback(
     (index) => {
-      if (index < currentStepIndex || index === currentStepIndex) {
-        return "text-gray-800";
+      if (index < currentStepIndex) {
+        return "text-[#1B3631] font-bold";
+      } else if (index === currentStepIndex) {
+        return "text-[#1B3631] font-bold";
       } else {
-        return "text-gray-500";
+        return "text-[#1B3631] font-medium";
       }
     },
     [currentStepIndex],
   );
 
   return (
-    <div className="w-full bg-white">
-      {/* ✅ Progress Steps with Dashed Connectors */}
-      <div className="flex items-start justify-between mb-3">
+    <div className="w-full bg-white py-2">
+      {/* ✅ Progress Steps */}
+      <div className="flex items-center justify-between relative">
         {steps.map((step, index) => (
           <div
             key={step.id}
-            className="flex flex-col items-center flex-1 relative"
+            className="flex flex-col items-center relative flex-1"
           >
-            {/* ✅ Step Circle */}
-            <div
-              className={`w-7 h-7 rounded-full flex items-center justify-center font-semibold transition-all duration-300 z-10 ${getStepColor(
-                index,
-              )} ${index < currentStepIndex ? "text-white" : "text-gray-800"}`}
-            >
-              {index < currentStepIndex ? (
-                <Check size={14} />
-              ) : // <span className="text-sm">{step.id}</span>
-              null}
-            </div>
+            {/* ✅ Container for connector and circle */}
+            <div className="relative w-full flex justify-center items-center h-4">
+              {/* ✅ Solid Connector (Between circles) */}
+              {index < steps.length - 1 && (
+                <div
+                  className={`absolute h-[2px] transition-all duration-300 ${getConnectorColor(
+                    index,
+                  )}`}
+                  style={{
+                    width: "100%",
+                    left: "50%",
+                    zIndex: 0,
+                  }}
+                />
+              )}
 
-            {/* ✅ Dashed Connector (Between circles) */}
-            {index < steps.length - 1 && (
-              <div
-                className={`absolute top-3.5 left-1/2 w-full h-1 border-t-2 border-dashed transition-all duration-300 ${
-                  index < currentStepIndex
-                    ? "border-green-500"
-                    : "border-gray-300"
-                }`}
-                style={{
-                  width: "calc(100% - 14px)",
-                  left: "calc(50% + 3.5px)",
-                }}
-              />
-            )}
+              {/* ✅ Step Circle */}
+              <div className="relative z-10 flex items-center justify-center bg-white rounded-full ring-[3px] ring-white">
+                {index < currentStepIndex ? (
+                  <div className="w-[12px] h-[12px] rounded-full bg-green-500" />
+                ) : index === currentStepIndex ? (
+                  <div className="w-[12px] h-[12px] rounded-full bg-yellow-400" />
+                ) : (
+                  <div className="w-[12px] h-[12px] rounded-full bg-white border-[2px] border-gray-300" />
+                )}
+              </div>
+            </div>
 
             {/* ✅ Step Label */}
             <p
-              className={`text-xs mt-2 font-medium text-center leading-tight max-w-[80px] ${getTextColor(
+              className={`text-xs mt-2 text-center leading-tight max-w-[80px] ${getTextColor(
                 index,
               )}`}
             >
