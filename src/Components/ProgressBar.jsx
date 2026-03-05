@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
@@ -15,37 +15,54 @@ const ProgressBar = () => {
   }, []);
 
   // ✅ Check if progress bar should be shown
-  const isEligible =
-    (businessType === "Corporate" || businessType === "Hospitality") &&
-    (businessPlan === "SMB" || businessPlan === "Enterprise");
+  const isEligible = useMemo(
+    () => businessType === "Corporate" || businessType === "Hospitality",
+    [businessType],
+  );
 
   if (!isEligible) {
     return null;
   }
 
   // ✅ Determine 4th step label based on business plan
-  const getStep4Label = () => {
-    if (businessPlan === "Enterprise") {
-      return "Face Match";
-    } else {
-      return "OTP Code";
+  const getStep4Label = useCallback(() => {
+    return businessPlan === "Enterprise" ? "Face Match" : "OTP Code";
+  }, [businessPlan]);
+
+  // ✅ Define progress steps based on business plan
+  const steps = useMemo(() => {
+    // For Starter plan - 3 steps
+    if (businessPlan === "Starter") {
+      return [
+        {
+          id: 1,
+          label: "Verify Email",
+          path: ["/email", "/email-verification"],
+        },
+        { id: 2, label: "Consent", path: ["/consent"] },
+        {
+          id: 3,
+          label: "OTP Code",
+          path: ["/verification-code", "/verification"],
+        },
+      ];
     }
-  };
 
-  // ✅ Define progress steps
-  const steps = [
-    { id: 1, label: "Verify Email", path: ["/email", "/email-verification"] },
-    { id: 2, label: "Consent", path: ["/consent", "/id-verification"] },
-    { id: 3, label: "Verify ID", path: [] },
-    {
-      id: 4,
-      label: getStep4Label(),
-      path: ["/verification-code", "/verification", "/face-match"],
-    },
-  ];
+    // For SMB and Enterprise - 4 steps
+    return [
+      { id: 1, label: "Verify Email", path: ["/email", "/email-verification"] },
+      { id: 2, label: "Consent", path: ["/consent", "/id-verification"] },
+      { id: 3, label: "Verify ID", path: [] },
+      {
+        id: 4,
+        label: getStep4Label(),
+        path: ["/verification-code", "/verification", "/face-match"],
+      },
+    ];
+  }, [businessPlan, getStep4Label]);
 
-  // ✅ Determine current step and color states
-  const getCurrentStepIndex = () => {
+  // ✅ Get current step index with memoization
+  const currentStepIndex = useMemo(() => {
     const currentPath = location.pathname;
     for (let i = 0; i < steps.length; i++) {
       if (steps[i].path.includes(currentPath)) {
@@ -53,28 +70,32 @@ const ProgressBar = () => {
       }
     }
     return -1;
-  };
+  }, [location.pathname, steps]);
 
-  const currentStepIndex = getCurrentStepIndex();
+  // ✅ Get color for each step with memoization
+  const getStepColor = useCallback(
+    (index) => {
+      if (index < currentStepIndex) {
+        return "bg-green-500"; // ✅ Completed steps are green
+      } else if (index === currentStepIndex) {
+        return "bg-yellow-400"; // ✅ Current step is yellow
+      } else {
+        return "bg-gray-300"; // ✅ Upcoming steps are gray
+      }
+    },
+    [currentStepIndex],
+  );
 
-  // ✅ Get color for each step
-  const getStepColor = (index) => {
-    if (index < currentStepIndex) {
-      return "bg-green-500"; // ✅ Completed steps are green
-    } else if (index === currentStepIndex) {
-      return "bg-yellow-400"; // ✅ Current step is yellow
-    } else {
-      return "bg-gray-300"; // ✅ Upcoming steps are gray
-    }
-  };
-
-  const getTextColor = (index) => {
-    if (index < currentStepIndex || index === currentStepIndex) {
-      return "text-gray-800";
-    } else {
-      return "text-gray-500";
-    }
-  };
+  const getTextColor = useCallback(
+    (index) => {
+      if (index < currentStepIndex || index === currentStepIndex) {
+        return "text-gray-800";
+      } else {
+        return "text-gray-500";
+      }
+    },
+    [currentStepIndex],
+  );
 
   return (
     <div className="w-full bg-white">
@@ -93,9 +114,8 @@ const ProgressBar = () => {
             >
               {index < currentStepIndex ? (
                 <Check size={18} />
-              ) : (
-                <span className="text-sm">{step.id}</span>
-              )}
+              ) : // <span className="text-sm">{step.id}</span>
+              null}
             </div>
 
             {/* ✅ Dashed Connector (Between circles) */}

@@ -1,17 +1,22 @@
 # Universal Progress Bar Implementation
 
 ## Overview
+
 A universal progress bar component has been created to show verification progress across the OnePass Mobile Web App. The progress bar displays 4 verification steps and is conditionally shown based on business type and plan.
 
 ## Progress Bar Component Location
+
 **File:** `src/Components/ProgressBar.jsx`
 
 ## Display Conditions
+
 The progress bar is **only displayed** when:
+
 - **Business Type:** Corporate OR Hospitality
 - **Business Plan:** SMB OR Enterprise
 
 ## Verification Steps
+
 1. **Verify Email** (Step 1)
    - Pages: `/email`, `/email-verification`
    - Color: Yellow (Active) / Green (Completed) / Gray (Pending)
@@ -31,11 +36,13 @@ The progress bar is **only displayed** when:
 ## Color Logic
 
 ### For Each Step:
+
 - **Gray (Inactive):** Steps that haven't been reached yet
 - **Yellow (Active):** The current step the user is on
 - **Green (Completed):** Steps already completed
 
 ### Progress Connector Line:
+
 - Shows the overall progress from Step 1 to Step 4
 - Green indicates completed portions
 - Gray indicates pending portions
@@ -43,31 +50,37 @@ The progress bar is **only displayed** when:
 ## Pages Updated with Progress Bar
 
 ### 1. EmailCapture.jsx (`/email`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** Verify Email = Yellow, Others = Gray
 
 ### 2. EmailVerification.jsx (`/email-verification`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** Verify Email = Yellow, Others = Gray
 
 ### 3. Consent.jsx (`/consent`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** Verify Email = Green, Consent = Yellow, Others = Gray
 
 ### 4. IdVerification.jsx (`/id-verification`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** Verify Email = Green, Consent = Green, Verify ID = Yellow, OTP = Gray
 
 ### 5. VerificationCodePage.jsx (`/verification-code`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** All Previous = Green, OTP Code / Face Match = Yellow
 
 ### 6. FaceMatch.jsx (`/face-match`)
+
 - Import added: `import ProgressBar from "../Components/ProgressBar";`
 - Component added after `<MobileHeader />`
 - **Step Status:** All Steps = Green (Final Step)
@@ -75,26 +88,31 @@ The progress bar is **only displayed** when:
 ## Component Features
 
 ### Step Indicators
+
 - **Numbered circles (1-4)** for pending/active steps
 - **Check mark (✓)** for completed steps
 - **Step labels** below each circle
 - **Responsive styling** with visual feedback
 
 ### Progress Connector
+
 - **Segmented line** showing overall progress
 - **Updates dynamically** based on current page/step
 - **Visual feedback** of completion percentage
 
 ### Data Source
+
 The component reads business type and plan from:
+
 ```javascript
-sessionStorage.getItem("businessType")
-sessionStorage.getItem("businessPlan")
+sessionStorage.getItem("businessType");
+sessionStorage.getItem("businessPlan");
 ```
 
 ## Usage in Pages
 
 ### Basic Implementation (In any page):
+
 ```jsx
 import ProgressBar from "../Components/ProgressBar";
 
@@ -103,11 +121,13 @@ import ProgressBar from "../Components/ProgressBar";
   <MobileHeader />
   <ProgressBar />
   {/* Rest of page content */}
-</div>
+</div>;
 ```
 
 ## Styling
+
 The component uses:
+
 - **Tailwind CSS** for styling
 - **Responsive design** that works on mobile and web
 - **Color scheme:**
@@ -130,6 +150,7 @@ The component uses:
 To verify the progress bar works correctly:
 
 1. **Set business type & plan** in sessionStorage:
+
    ```javascript
    sessionStorage.setItem("businessType", "Corporate");
    sessionStorage.setItem("businessPlan", "SMB");
