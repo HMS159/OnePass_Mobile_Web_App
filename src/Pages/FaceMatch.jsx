@@ -159,13 +159,30 @@ const FaceMatch = () => {
           return;
         }
 
-        await aadhaarService.persistAadhaarImage(
-          phoneCode,
-          phoneNumber,
-          imageFile,
-        );
+        // await aadhaarService.persistAadhaarImage(
+        //   phoneCode,
+        //   phoneNumber,
+        //   imageFile,
+        // );
+        // console.log("✅ Aadhaar Image Persisted");
 
-        console.log("✅ Aadhaar Image Persisted");
+        const type = sessionStorage.getItem("businessType");
+        const plan = sessionStorage.getItem("businessPlan");
+
+        if (
+          (type === "Corporate" || type === "Hospitality") &&
+          plan === "Enterprise"
+        ) {
+          await aadhaarService.persistAadhaarImage(
+            phoneCode,
+            phoneNumber,
+            imageFile,
+          );
+
+          console.log("✅ Aadhaar Image Persisted");
+        } else {
+          console.log("🚫 Aadhaar Image API skipped");
+        }
 
         await persistGuestRegister(phoneCode, phoneNumber, "identity_verified");
 
