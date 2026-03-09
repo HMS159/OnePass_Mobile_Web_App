@@ -12,17 +12,6 @@ const CheckinSuccess = () => {
   const [businessPlan, setBusinessPlan] = useState("");
   const [isUserVerified, setIsUserVerified] = useState(false);
 
-  // useEffect(() => {
-  //   // Get values from localStorage (adjust if coming from context)
-  //   const type = sessionStorage.getItem("businessType");
-  //   const plan = sessionStorage.getItem("businessPlan");
-  //   const verified = sessionStorage.getItem("isVerifiedUser");
-
-  //   setBusinessType(type);
-  //   setBusinessPlan(plan);
-  //   setIsUserVerified(verified === "true");
-  // }, []);
-
   useEffect(() => {
     const type = sessionStorage.getItem("businessType");
     const plan = sessionStorage.getItem("businessPlan");
