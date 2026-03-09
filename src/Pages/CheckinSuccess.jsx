@@ -183,7 +183,7 @@ const CheckinSuccess = () => {
           sessionStorage.getItem("phoneCountryCode") || "+91";
         const phoneNumber = sessionStorage.getItem("phoneNumber");
 
-        await persistGuestRegister(phoneCountryCode, phoneNumber);
+        await persistGuestRegister(phoneCountryCode, phoneNumber, "registered");
 
         // ✅ Mark as registered
         sessionStorage.setItem("guestRegistered", "true");

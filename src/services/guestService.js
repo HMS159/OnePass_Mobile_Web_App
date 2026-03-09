@@ -50,13 +50,18 @@ export const updateGuestEmail = async (
 
 /**
  * Persist Guest Register
- * PUT: /api/guest/persist/register
+ * PUT: /api/guest/persist/status
  *
  * @param {string} phoneCountryCode
  * @param {string} phoneNumber
+ * @param {string} verificationStatus
  * @returns {Promise<Object>}
  */
-export const persistGuestRegister = async (phoneCountryCode, phoneNumber) => {
+export const persistGuestRegister = async (
+  phoneCountryCode,
+  phoneNumber,
+  verificationStatus,
+) => {
   try {
     if (!phoneCountryCode || !phoneNumber) {
       throw new Error("Phone details are required");
@@ -65,6 +70,7 @@ export const persistGuestRegister = async (phoneCountryCode, phoneNumber) => {
     const payload = {
       phoneCountryCode,
       phoneNumber,
+      verificationStatus,
     };
 
     console.log("📤 Persist Guest Register Payload:", payload);
@@ -83,7 +89,6 @@ export const persistGuestRegister = async (phoneCountryCode, phoneNumber) => {
     throw error;
   }
 };
-
 /**
  * Update guest profile
  * @param {string} id
