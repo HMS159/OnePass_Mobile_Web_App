@@ -68,9 +68,10 @@ const Home = () => {
         const isEnterpriseVerified =
           businessPlan === "Enterprise" && status === "face_verified";
 
-        // Corporate Starter Registered (existing logic)
         const isCorporateStarterRegistered =
-          status === "registered" &&
+          (status === "registered" ||
+            status === "identity_verified" ||
+            status === "face_verified") &&
           (businessType === "Corporate" || businessType === "Hospitality") &&
           businessPlan === "Starter";
 
