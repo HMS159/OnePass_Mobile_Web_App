@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import MobileHeader from "../Components/MobileHeader";
 import ProgressBar from "../Components/ProgressBar";
 import aadhaarService from "../services/aadhaarService"; // ✅ IMPORT SERVICE
+import { persistGuestRegister } from "../services/guestService";
 
 const FaceMatch = () => {
   const navigate = useNavigate();
@@ -165,6 +166,10 @@ const FaceMatch = () => {
         );
 
         console.log("✅ Aadhaar Image Persisted");
+
+        await persistGuestRegister(phoneCode, phoneNumber, "verified");
+
+        console.log("✅ Guest verification status updated");
 
         sessionStorage.setItem("aadhaarPersisted", "true");
         sessionStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
