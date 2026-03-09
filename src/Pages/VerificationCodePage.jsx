@@ -5,6 +5,7 @@ import MobileHeader from "../Components/MobileHeader";
 import ProgressBar from "../Components/ProgressBar";
 import { VERIFICATION_UI } from "../constants/ui";
 import aadhaarService from "../services/aadhaarService"; // ✅ IMPORT SERVICE
+import { persistGuestRegister } from "../services/guestService";
 
 const VerificationCodePage = () => {
   const navigate = useNavigate();
@@ -180,6 +181,10 @@ const VerificationCodePage = () => {
             );
           }
         }
+
+        await persistGuestRegister(phoneCode, phoneNumber, "verified");
+
+        console.log("✅ Guest verification status updated");
 
         sessionStorage.setItem("aadhaarData", JSON.stringify(aadhaarData));
         sessionStorage.setItem("aadhaarPersisted", "true");
