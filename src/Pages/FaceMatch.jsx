@@ -167,7 +167,7 @@ const FaceMatch = () => {
 
         console.log("✅ Aadhaar Image Persisted");
 
-        await persistGuestRegister(phoneCode, phoneNumber, "verified");
+        await persistGuestRegister(phoneCode, phoneNumber, "identity_verified");
 
         console.log("✅ Guest verification status updated");
 
