@@ -31,32 +31,6 @@ const Home = () => {
 
         console.log("UserData:", data);
 
-        // const status = data?.verificationStatus?.toLowerCase();
-
-        // const isCorporateStarterRegistered =
-        //   status === "verified" ||
-        //   (status === "registered" &&
-        //     (businessType === "Corporate" || businessType === "Hospitality") &&
-        //     businessPlan === "Starter");
-
-        // if (status === "verified" || isCorporateStarterRegistered) {
-        //   setIsVerified(true);
-
-        //   setVerifiedUser({
-        //     name: data.fullName,
-        //     email: data.email,
-        //     phone: `${country} ••••••${phone.slice(-4)}`,
-        //   });
-
-        //   // 🔹 Set session flag when registered user qualifies
-        //   if (isCorporateStarterRegistered) {
-        //     sessionStorage.setItem("guestRegistered", "true");
-        //   }
-        // } else {
-        //   setIsVerified(false);
-        //   setVerifiedUser(null);
-        // }
-
         const status = data?.verificationStatus?.toLowerCase();
 
         // SMB scenario

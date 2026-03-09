@@ -170,18 +170,6 @@ const VerificationCodePage = () => {
           aadhaarData?.image ||
           aadhaarData?.profile_image;
 
-        // if (aadhaarBase64) {
-        //   const imageFile = base64ToFile(aadhaarBase64, "aadhaar.jpg");
-
-        //   if (imageFile) {
-        //     await aadhaarService.persistAadhaarImage(
-        //       phoneCode,
-        //       phoneNumber,
-        //       imageFile,
-        //     );
-        //   }
-        // }
-
         if (
           aadhaarBase64 &&
           (type === "corporate" || type === "hospitality") &&

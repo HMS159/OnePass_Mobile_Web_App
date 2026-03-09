@@ -159,13 +159,6 @@ const FaceMatch = () => {
           return;
         }
 
-        // await aadhaarService.persistAadhaarImage(
-        //   phoneCode,
-        //   phoneNumber,
-        //   imageFile,
-        // );
-        // console.log("✅ Aadhaar Image Persisted");
-
         const type = sessionStorage.getItem("businessType");
         const plan = sessionStorage.getItem("businessPlan");
 
