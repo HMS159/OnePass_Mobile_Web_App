@@ -9,6 +9,14 @@ import { HOME_UI } from "../constants/ui";
 
 const Home = () => {
   const { guestNumber, restaurantId } = useParams();
+
+  useEffect(() => {
+    if (guestNumber && restaurantId) {
+      sessionStorage.setItem("guestNumber", guestNumber);
+      sessionStorage.setItem("restaurantId", restaurantId);
+    }
+  }, [guestNumber, restaurantId]);
+
   const navigate = useNavigate();
 
   const [businessType, setBusinessType] = useState("");

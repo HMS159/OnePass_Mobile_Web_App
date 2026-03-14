@@ -14,25 +14,31 @@ import WelcomeBack from "./Pages/WelcomeBack.jsx";
 import EmailVerification from "./Pages/EmailVerification.jsx";
 import MyProfile from "./Pages/MyProfile.jsx";
 import IdVerification from "./Pages/IdVerification.jsx";
+import ParamGuard from "./Components/ParamGuard";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<MobileLayout />}>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/home/:guestNumber/:restaurantId" element={<Home />} />
-        <Route path="/email" element={<EmailCapture />} />
-        <Route path="/welcome-back" element={<WelcomeBack />} />
-        <Route path="/consent" element={<Consent />} />
-        <Route path="/verification" element={<VerificationCode />} />
-        <Route path="/verification-code" element={<VerificationCodePage />} />
-        <Route path="/face-match" element={<FaceMatch />} />
-        <Route path="/verification-done" element={<VerificationDone />} />
-        <Route path="/success" element={<CheckinSuccess />} />
-        <Route path="/history" element={<CheckinHistory />} />
-        <Route path="/email-verification" element={<EmailVerification />} />
-        <Route path="/profile" element={<MyProfile />} />
-        <Route path="/id-verification" element={<IdVerification />} />
+
+        {/* Protected routes */}
+        <Route element={<ParamGuard />}>
+          <Route path="email" element={<EmailCapture />} />
+          <Route path="welcome-back" element={<WelcomeBack />} />
+          <Route path="consent" element={<Consent />} />
+          <Route path="verification" element={<VerificationCode />} />
+          <Route path="verification-code" element={<VerificationCodePage />} />
+          <Route path="face-match" element={<FaceMatch />} />
+          <Route path="verification-done" element={<VerificationDone />} />
+          <Route path="success" element={<CheckinSuccess />} />
+          <Route path="history" element={<CheckinHistory />} />
+          <Route path="email-verification" element={<EmailVerification />} />
+          <Route path="profile" element={<MyProfile />} />
+          <Route path="id-verification" element={<IdVerification />} />
+        </Route>
       </Route>
     </Routes>
   );
