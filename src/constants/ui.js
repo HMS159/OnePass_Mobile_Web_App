@@ -175,3 +175,20 @@ export const EMAIL_VERIFICATION_UI = {
   RESEND_TEXT: "Didn't receive an email?",
   RESEND_BUTTON: "Resend",
 };
+
+export const ROUTES = {
+  HOME: "/",
+  HOME_WITH_PARAMS: "/home/:guestNumber/:restaurantId",
+  EMAIL: "email",
+  WELCOME_BACK: "welcome-back",
+  CONSENT: "consent",
+  VERIFICATION: "verification",
+  VERIFICATION_CODE: "verification-code",
+  FACE_MATCH: "face-match",
+  VERIFICATION_DONE: "verification-done",
+  SUCCESS: "success",
+  HISTORY: "history",
+  EMAIL_VERIFICATION: "email-verification",
+  PROFILE: "profile",
+  ID_VERIFICATION: "id-verification",
+};
