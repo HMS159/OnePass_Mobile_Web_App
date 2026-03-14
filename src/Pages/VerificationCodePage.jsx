@@ -17,13 +17,20 @@ const VerificationCodePage = () => {
 
   useEffect(() => {
     console.log("🚀 VerificationCodePage mounted");
+    console.log(
+      "📦 Session Storage:",
+      businessType,
+      businessPlan,
+      isUserVerified,
+    );
 
     // 🔹 Generate Random Code
-    const randomNumber = Math.floor(100000 + Math.random() * 900000);
-    const formatted = `${randomNumber.toString().slice(0, 3)} ${randomNumber
-      .toString()
-      .slice(3)}`;
-    setCode(formatted);
+    // const randomNumber = Math.floor(100000 + Math.random() * 900000);
+    // const formatted = `${randomNumber.toString().slice(0, 3)} ${randomNumber
+    //   .toString()
+    //   .slice(3)}`;
+    // setCode(formatted);
+    setCode("123 456");
 
     // 🔹 Load Business Data
     const typeRaw = sessionStorage.getItem("businessType");
